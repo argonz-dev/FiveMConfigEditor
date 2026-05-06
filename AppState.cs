@@ -12,6 +12,8 @@ namespace FiveMConfigEditorWPF
 
         public static string IniPath { get; set; } = "";
         public static string FiveMPath { get; set; } = @"d:\FiveM\FiveM.app";
+        public static string AiApiBaseUrl { get; set; } = SecureConfig.GetApiBaseUrl();
+        public static string AiApiKey { get; set; } = SecureConfig.GetApiKey();
         public static IniData Data { get; set; } = new();
         public static List<Preset> Presets { get; set; } = new();
         public static List<Snapshot> Snapshots { get; set; } = new();
@@ -30,6 +32,10 @@ namespace FiveMConfigEditorWPF
                         IniPath = s.IniPath;
                     if (!string.IsNullOrEmpty(s.FiveMPath))
                         FiveMPath = s.FiveMPath;
+                    if (!string.IsNullOrEmpty(s.AiApiBaseUrl))
+                        AiApiBaseUrl = s.AiApiBaseUrl;
+                    if (!string.IsNullOrEmpty(s.AiApiKey))
+                        AiApiKey = s.AiApiKey;
                 }
             }
             catch { }
@@ -42,7 +48,9 @@ namespace FiveMConfigEditorWPF
                 var json = JsonSerializer.Serialize(new AppSettings 
                 { 
                     IniPath = IniPath,
-                    FiveMPath = FiveMPath
+                    FiveMPath = FiveMPath,
+                    AiApiBaseUrl = AiApiBaseUrl,
+                    AiApiKey = AiApiKey
                 });
                 File.WriteAllText(SettingsPath, json);
             }
@@ -53,6 +61,8 @@ namespace FiveMConfigEditorWPF
         {
             public string IniPath { get; set; } = "";
             public string FiveMPath { get; set; } = "";
+            public string AiApiBaseUrl { get; set; } = "";
+            public string AiApiKey { get; set; } = "";
         }
     }
 }

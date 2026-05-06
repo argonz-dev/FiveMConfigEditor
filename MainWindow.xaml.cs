@@ -17,6 +17,7 @@ namespace FiveMConfigEditorWPF
         private HistoryView? _historyView;
         private ModManagerView? _modManagerView;
         private GraphicsView? _graphicsView;
+        private AiAssistantView? _aiAssistantView;
         private bool _isCheckingUpdate = false;
         private bool _hasUpdateAvailable = false;
         private bool _isManualUpdateCheck = false;
@@ -58,6 +59,7 @@ namespace FiveMConfigEditorWPF
             _historyView    = new HistoryView(this);
             _modManagerView = new ModManagerView(this);
             _graphicsView   = new GraphicsView(this);
+            _aiAssistantView = new AiAssistantView(this);
 
             // Auto-load ini dari settings sebelumnya
             if (!string.IsNullOrEmpty(AppState.IniPath) && File.Exists(AppState.IniPath))
@@ -72,8 +74,7 @@ namespace FiveMConfigEditorWPF
             AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
 
             // Check for updates after window is loaded (silent check)
-            // DISABLED: Uncomment when GitHub repository is ready
-            // Loaded += (s, e) => CheckForUpdates(silent: true);
+            Loaded += (s, e) => CheckForUpdates(silent: true);
         }
 
         private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
@@ -88,28 +89,32 @@ namespace FiveMConfigEditorWPF
                     _hasUpdateAvailable = true;
                     UpdateUpdateButtonState();
 
-                    var result = MessageBox.Show(
-                        $"Update tersedia!\n\n" +
-                        $"Versi saat ini: {args.CurrentVersion}\n" +
-                        $"Versi baru: {args.InstalledVersion}\n\n" +
-                        $"Apakah Anda ingin update sekarang?",
-                        "Update Tersedia",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Information);
-
-                    if (result == MessageBoxResult.Yes)
+                    // Only show dialog if manually triggered
+                    if (_isManualUpdateCheck)
                     {
-                        try
+                        var result = MessageBox.Show(
+                            $"Update tersedia!\n\n" +
+                            $"Versi saat ini: {args.CurrentVersion}\n" +
+                            $"Versi baru: {args.InstalledVersion}\n\n" +
+                            $"Apakah Anda ingin update sekarang?",
+                            "Update Tersedia",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Information);
+
+                        if (result == MessageBoxResult.Yes)
                         {
-                            if (AutoUpdater.DownloadUpdate(args))
+                            try
                             {
-                                Application.Current.Shutdown();
+                                if (AutoUpdater.DownloadUpdate(args))
+                                {
+                                    Application.Current.Shutdown();
+                                }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Error saat download update:\n{ex.Message}", 
-                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Error saat download update:\n{ex.Message}", 
+                                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
                         }
                     }
                 }
@@ -131,21 +136,25 @@ namespace FiveMConfigEditorWPF
             }
             else
             {
-                if (args.Error is System.Net.WebException)
+                // Only show error if manually triggered
+                if (_isManualUpdateCheck)
                 {
-                    MessageBox.Show(
-                        "Tidak dapat memeriksa update.\nPastikan koneksi internet Anda aktif.",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        $"Error saat cek update:\n{args.Error.Message}",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    if (args.Error is System.Net.WebException)
+                    {
+                        MessageBox.Show(
+                            "Tidak dapat memeriksa update.\nPastikan koneksi internet Anda aktif.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            $"Error saat cek update:\n{args.Error.Message}",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
                 }
             }
         }
@@ -162,10 +171,12 @@ namespace FiveMConfigEditorWPF
             {
                 // Configure AutoUpdater
                 AutoUpdater.Mandatory = false;
-                AutoUpdater.UpdateMode = Mode.ForcedDownload;
+                AutoUpdater.UpdateMode = Mode.Normal;
                 AutoUpdater.ShowSkipButton = false;
                 AutoUpdater.ShowRemindLaterButton = false;
-                AutoUpdater.ReportErrors = !silent;
+                AutoUpdater.ReportErrors = false; // Always false, we handle errors manually
+                AutoUpdater.RunUpdateAsAdmin = false;
+                AutoUpdater.DownloadPath = Path.Combine(Path.GetTempPath(), "FiveMConfigEditor");
                 
                 // GitHub raw URL for update.xml
                 string updateUrl = "https://raw.githubusercontent.com/argonz-dev/FiveMConfigEditor/main/update.xml";
@@ -230,6 +241,7 @@ namespace FiveMConfigEditorWPF
         private void BtnHistory_Click(object sender, RoutedEventArgs e) => NavigateTo("History");
         private void BtnModManager_Click(object sender, RoutedEventArgs e) => NavigateTo("ModManager");
         private void BtnGraphics_Click(object sender, RoutedEventArgs e) => NavigateTo("Graphics");
+        private void BtnAiAssistant_Click(object sender, RoutedEventArgs e) => NavigateTo("AiAssistant");
 
         public void NavigateTo(string page)
         {
@@ -238,6 +250,7 @@ namespace FiveMConfigEditorWPF
             BtnHistory.Style    = (Style)FindResource("SidebarButtonStyle");
             BtnModManager.Style = (Style)FindResource("SidebarButtonStyle");
             BtnGraphics.Style   = (Style)FindResource("SidebarButtonStyle");
+            BtnAiAssistant.Style = (Style)FindResource("SidebarButtonStyle");
 
             switch (page)
             {
@@ -265,6 +278,11 @@ namespace FiveMConfigEditorWPF
                     BtnGraphics.Style = (Style)FindResource("SidebarButtonActiveStyle");
                     _graphicsView?.Refresh();
                     MainContent.Content = _graphicsView;
+                    break;
+                case "AiAssistant":
+                    BtnAiAssistant.Style = (Style)FindResource("SidebarButtonActiveStyle");
+                    _aiAssistantView?.Refresh();
+                    MainContent.Content = _aiAssistantView;
                     break;
             }
         }

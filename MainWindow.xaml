@@ -180,6 +180,14 @@
               </StackPanel>
             </Button>
 
+            <Button x:Name="BtnAiAssistant" Style="{StaticResource SidebarButtonStyle}"
+                    Click="BtnAiAssistant_Click">
+              <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="🤖" FontSize="20" HorizontalAlignment="Center"/>
+                <TextBlock Text="AI Chat" FontSize="10" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+              </StackPanel>
+            </Button>
+
           </StackPanel>
         </Border>
 

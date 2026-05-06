@@ -1,0 +1,227 @@
+<UserControl x:Class="FiveMConfigEditorWPF.Views.AiAssistantView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+
+  <Grid Margin="16">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header -->
+    <Border Grid.Row="0" Background="#FF2A1F14" CornerRadius="8" Padding="16,12" Margin="0,0,0,12">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+          <TextBlock Text="🤖 AI Assistant" Foreground="#FFFF8C00" FontSize="16" FontWeight="Bold"/>
+          <TextBlock Text="Ask me anything about GTA V optimization" 
+                     Foreground="#FFAA8866" FontSize="11" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal">
+          <Button x:Name="BtnClearChat" Content="🗑️" 
+                  Width="32" Height="32"
+                  Background="#FF3A2510" Foreground="#FFAA8866" 
+                  BorderBrush="#FF4A3020" BorderThickness="1"
+                  FontSize="14" Cursor="Hand" Click="BtnClearChat_Click"
+                  ToolTip="Clear chat history">
+            <Button.Style>
+              <Style TargetType="Button">
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                      <Border x:Name="Bd" Background="{TemplateBinding Background}" 
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              CornerRadius="6">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                      </Border>
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                          <Setter TargetName="Bd" Property="Background" Value="#FFFF4D4D"/>
+                          <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Button.Style>
+          </Button>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Chat Messages -->
+    <Border Grid.Row="1" Background="#FF0F0A08" CornerRadius="8" BorderBrush="#FF4A3020" BorderThickness="1">
+      <ScrollViewer x:Name="ChatScrollViewer" VerticalScrollBarVisibility="Auto" Padding="12">
+        <StackPanel x:Name="ChatMessagesPanel">
+          <!-- No default welcome message -->
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+
+    <!-- Quick Actions -->
+    <Border Grid.Row="2" Background="#FF2A1F14" CornerRadius="8" Padding="12" Margin="0,12,0,8">
+      <StackPanel>
+        <TextBlock Text="Quick Actions:" Foreground="#FFAA8866" FontSize="11" FontWeight="Bold" Margin="0,0,0,8"/>
+        <WrapPanel>
+          <Button Content="💡 Optimization Tips" Margin="0,0,8,8" Padding="8,4"
+                  Background="#FF3A2510" Foreground="#FFFF8C00" BorderBrush="#FF4A3020" BorderThickness="1"
+                  FontSize="10" Cursor="Hand" Click="BtnQuickOptimization_Click">
+            <Button.Style>
+              <Style TargetType="Button">
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                      <Border x:Name="Bd" Background="{TemplateBinding Background}" 
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              CornerRadius="4" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter/>
+                      </Border>
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                          <Setter TargetName="Bd" Property="Background" Value="#FF4A3020"/>
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Button.Style>
+          </Button>
+
+          <Button Content="🎮 Best Settings for RTX" Margin="0,0,8,8" Padding="8,4"
+                  Background="#FF3A2510" Foreground="#FFFF8C00" BorderBrush="#FF4A3020" BorderThickness="1"
+                  FontSize="10" Cursor="Hand" Click="BtnQuickRTX_Click">
+            <Button.Style>
+              <Style TargetType="Button">
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                      <Border x:Name="Bd" Background="{TemplateBinding Background}" 
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              CornerRadius="4" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter/>
+                      </Border>
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                          <Setter TargetName="Bd" Property="Background" Value="#FF4A3020"/>
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Button.Style>
+          </Button>
+
+          <Button Content="🔧 Fix Low FPS" Margin="0,0,8,8" Padding="8,4"
+                  Background="#FF3A2510" Foreground="#FFFF8C00" BorderBrush="#FF4A3020" BorderThickness="1"
+                  FontSize="10" Cursor="Hand" Click="BtnQuickLowFPS_Click">
+            <Button.Style>
+              <Style TargetType="Button">
+                <Setter Property="Template">
+                  <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                      <Border x:Name="Bd" Background="{TemplateBinding Background}" 
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              CornerRadius="4" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter/>
+                      </Border>
+                      <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                          <Setter TargetName="Bd" Property="Background" Value="#FF4A3020"/>
+                        </Trigger>
+                      </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                  </Setter.Value>
+                </Setter>
+              </Style>
+            </Button.Style>
+          </Button>
+        </WrapPanel>
+      </StackPanel>
+    </Border>
+
+    <!-- Input Area -->
+    <Border Grid.Row="3" Background="#FF2A1F14" CornerRadius="8" Padding="12">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox x:Name="TxtUserInput" Grid.Column="0"
+                 Background="#FF0F0A08" Foreground="#FFAA8866"
+                 BorderBrush="#FF4A3020" BorderThickness="1"
+                 Padding="12,10" FontSize="12"
+                 TextWrapping="Wrap" MaxHeight="80"
+                 VerticalScrollBarVisibility="Auto"
+                 KeyDown="TxtUserInput_KeyDown">
+          <TextBox.Style>
+            <Style TargetType="TextBox">
+              <Setter Property="Template">
+                <Setter.Value>
+                  <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6">
+                      <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                      <Trigger Property="IsFocused" Value="True">
+                        <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFF8C00"/>
+                      </Trigger>
+                    </ControlTemplate.Triggers>
+                  </ControlTemplate>
+                </Setter.Value>
+              </Setter>
+            </Style>
+          </TextBox.Style>
+        </TextBox>
+
+        <Button x:Name="BtnSend" Grid.Column="1" Content="Send" 
+                Width="80" Height="40" Margin="8,0,0,0"
+                Background="#FFFF8C00" Foreground="White" 
+                BorderThickness="0"
+                FontSize="12" FontWeight="Bold" Cursor="Hand" 
+                Click="BtnSend_Click">
+          <Button.Style>
+            <Style TargetType="Button">
+              <Setter Property="Template">
+                <Setter.Value>
+                  <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6">
+                      <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                      <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="Bd" Property="Background" Value="#FFFFAA00"/>
+                      </Trigger>
+                      <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.5"/>
+                      </Trigger>
+                    </ControlTemplate.Triggers>
+                  </ControlTemplate>
+                </Setter.Value>
+              </Setter>
+            </Style>
+          </Button.Style>
+        </Button>
+      </Grid>
+    </Border>
+
+  </Grid>
+</UserControl>

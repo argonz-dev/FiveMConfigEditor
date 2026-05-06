@@ -59,9 +59,15 @@ namespace FiveMConfigEditorWPF.Views
                 {
                     _data = GtaGraphicsHelper.Load(_currentPath);
                     LoadDataToUI();
+                    TxtFileStatus.Text = "✓ File found and loaded successfully";
+                    TxtFileStatus.Foreground = new System.Windows.Media.SolidColorBrush(
+                        (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FF00FF00"));
                 }
                 catch (Exception ex)
                 {
+                    TxtFileStatus.Text = "⚠ File found but failed to load";
+                    TxtFileStatus.Foreground = new System.Windows.Media.SolidColorBrush(
+                        (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFFF0000"));
                     MessageBox.Show($"Failed to load graphics settings:\n{ex.Message}", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -71,6 +77,9 @@ namespace FiveMConfigEditorWPF.Views
                 // Use default values
                 _data = new GtaGraphicsData();
                 LoadDataToUI();
+                TxtFileStatus.Text = "✗ File not found (using default values)";
+                TxtFileStatus.Foreground = new System.Windows.Media.SolidColorBrush(
+                    (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFFFA500"));
             }
         }
 

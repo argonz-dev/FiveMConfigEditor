@@ -27,7 +27,17 @@
         <TextBlock Text="Graphics Presets" Foreground="White"
                    FontSize="16" FontWeight="Bold" Margin="0,0,0,6"/>
         <TextBlock Text="Simpan dan muat preset graphics settings"
-                   Foreground="#FFAA8866" FontSize="11"/>
+                   Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,8"/>
+        
+        <!-- Current Settings Info -->
+        <Border Background="#0FFF8C00" BorderBrush="#33FF8C00" BorderThickness="1"
+                CornerRadius="6" Padding="8,6">
+          <StackPanel>
+            <TextBlock Text="Current Settings:" Foreground="#FFFF8C00" FontSize="10" 
+                       FontWeight="Bold" Margin="0,0,0,3"/>
+            <TextBlock x:Name="TxtCurrentSettings" Foreground="#FFAA8866" FontSize="9" TextWrapping="Wrap"/>
+          </StackPanel>
+        </Border>
       </StackPanel>
 
       <!-- Preset List -->

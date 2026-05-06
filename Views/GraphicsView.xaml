@@ -23,6 +23,10 @@
             <TextBlock Text="File: " Foreground="#FFFF8C00" FontSize="10" Margin="0,0,4,0" VerticalAlignment="Center"/>
             <TextBlock x:Name="TxtFilePath" Foreground="#FFAA8866" FontSize="10" TextWrapping="Wrap"/>
           </StackPanel>
+          <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+            <TextBlock Text="Status: " Foreground="#FFFF8C00" FontSize="10" Margin="0,0,4,0" VerticalAlignment="Center"/>
+            <TextBlock x:Name="TxtFileStatus" Foreground="#FFAA8866" FontSize="10"/>
+          </StackPanel>
           <StackPanel Orientation="Horizontal">
             <Button Content="Browse" Style="{StaticResource NeonButtonSmallStyle}" 
                     Margin="0,0,8,0" Click="BtnBrowse_Click"/>

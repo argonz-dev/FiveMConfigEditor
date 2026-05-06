@@ -18,7 +18,58 @@ namespace FiveMConfigEditorWPF.Dialogs
             InitializeComponent();
             _currentData = currentData;
             _presets = GraphicsSettingsPresetManager.Load();
+            
+            // Display current settings info
+            UpdateCurrentSettingsInfo();
+            
             RefreshList();
+        }
+
+        private void UpdateCurrentSettingsInfo()
+        {
+            var info = $"Texture: {GetQualityName(_currentData.TextureQuality)} | " +
+                       $"Shader: {GetQualityName(_currentData.ShaderQuality)} | " +
+                       $"Shadow: {GetQualityName(_currentData.ShadowQuality)} | " +
+                       $"Reflection: {GetQualityName(_currentData.ReflectionQuality)} | " +
+                       $"PostFX: {GetQualityName(_currentData.PostFX)} | " +
+                       $"MSAA: {GetMSAAName(_currentData.MSAA)} | " +
+                       $"Anisotropic: {GetAnisotropicName(_currentData.AnisotropicFiltering)}";
+            
+            TxtCurrentSettings.Text = info;
+        }
+
+        private string GetQualityName(int quality)
+        {
+            return quality switch
+            {
+                0 => "Off/Very Low",
+                1 => "Low",
+                2 => "Normal",
+                3 => "High",
+                4 => "Very High",
+                _ => quality.ToString()
+            };
+        }
+
+        private string GetMSAAName(int msaa)
+        {
+            return msaa switch
+            {
+                0 => "Off",
+                1 => "x2",
+                2 => "x4",
+                3 => "x8",
+                _ => msaa.ToString()
+            };
+        }
+
+        private string GetAnisotropicName(int value)
+        {
+            return value switch
+            {
+                0 => "Off",
+                _ => $"x{value}"
+            };
         }
 
         private void RefreshList()
