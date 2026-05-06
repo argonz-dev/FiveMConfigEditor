@@ -136,6 +136,10 @@ namespace FiveMConfigEditorWPF
             }
             else
             {
+                // Reset state on error
+                _hasUpdateAvailable = false;
+                UpdateUpdateButtonState();
+
                 // Only show error if manually triggered
                 if (_isManualUpdateCheck)
                 {
@@ -155,6 +159,11 @@ namespace FiveMConfigEditorWPF
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
                     }
+                }
+                else
+                {
+                    // Silent mode - just log the error
+                    System.Diagnostics.Debug.WriteLine($"Silent update check failed: {args.Error?.Message}");
                 }
             }
         }
