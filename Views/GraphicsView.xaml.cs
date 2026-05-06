@@ -214,6 +214,37 @@ namespace FiveMConfigEditorWPF.Views
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        private void BtnBackup_Click(object sender, RoutedEventArgs e)
+        {
+            string result = SettingsBackup.CreateBackup();
+            MessageBox.Show(result, "Backup Settings",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void BtnResetToSafe_Click(object sender, RoutedEventArgs e)
+        {
+            var confirm = MessageBox.Show(
+                "Reset graphics settings ke default (Low/Safe)?\n\n" +
+                "Ini akan:\n" +
+                "- Backup settings saat ini\n" +
+                "- Reset semua settings ke nilai aman\n" +
+                "- Memperbaiki crash FiveM\n\n" +
+                "Lanjutkan?",
+                "Reset to Safe Settings",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (confirm == MessageBoxResult.Yes)
+            {
+                string result = SettingsBackup.RestoreDefaultSettings();
+                MessageBox.Show(result, "Reset Complete",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                
+                // Reload the new settings
+                Refresh();
+            }
+        }
+
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             try

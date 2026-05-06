@@ -31,7 +31,13 @@
             <Button Content="Browse" Style="{StaticResource NeonButtonSmallStyle}" 
                     Margin="0,0,8,0" Click="BtnBrowse_Click"/>
             <Button Content="Reload" Style="{StaticResource NeonButtonSmallStyle}" 
-                    Click="BtnReload_Click"/>
+                    Margin="0,0,8,0" Click="BtnReload_Click"/>
+            <Button Content="💾 Backup" Style="{StaticResource NeonButtonSmallStyle}" 
+                    Margin="0,0,8,0" Click="BtnBackup_Click" 
+                    ToolTip="Backup current settings"/>
+            <Button Content="🔄 Reset to Safe" Style="{StaticResource NeonButtonSmallStyle}" 
+                    Click="BtnResetToSafe_Click"
+                    ToolTip="Reset to safe default settings (fixes crashes)"/>
           </StackPanel>
         </StackPanel>
       </Border>
