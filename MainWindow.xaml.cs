@@ -15,6 +15,7 @@ namespace FiveMConfigEditorWPF
         private ConfigView? _configView;
         private HistoryView? _historyView;
         private ModManagerView? _modManagerView;
+        private GraphicsView? _graphicsView;
 
         public MainWindow()
         {
@@ -52,6 +53,7 @@ namespace FiveMConfigEditorWPF
             _configView     = new ConfigView(this);
             _historyView    = new HistoryView(this);
             _modManagerView = new ModManagerView(this);
+            _graphicsView   = new GraphicsView(this);
 
             // Auto-load ini dari settings sebelumnya
             if (!string.IsNullOrEmpty(AppState.IniPath) && File.Exists(AppState.IniPath))
@@ -115,6 +117,7 @@ namespace FiveMConfigEditorWPF
         private void BtnConfig_Click(object sender, RoutedEventArgs e) => NavigateTo("Config");
         private void BtnHistory_Click(object sender, RoutedEventArgs e) => NavigateTo("History");
         private void BtnModManager_Click(object sender, RoutedEventArgs e) => NavigateTo("ModManager");
+        private void BtnGraphics_Click(object sender, RoutedEventArgs e) => NavigateTo("Graphics");
 
         public void NavigateTo(string page)
         {
@@ -122,6 +125,7 @@ namespace FiveMConfigEditorWPF
             BtnConfig.Style     = (Style)FindResource("SidebarButtonStyle");
             BtnHistory.Style    = (Style)FindResource("SidebarButtonStyle");
             BtnModManager.Style = (Style)FindResource("SidebarButtonStyle");
+            BtnGraphics.Style   = (Style)FindResource("SidebarButtonStyle");
 
             switch (page)
             {
@@ -144,6 +148,11 @@ namespace FiveMConfigEditorWPF
                     BtnModManager.Style = (Style)FindResource("SidebarButtonActiveStyle");
                     _modManagerView?.Refresh();
                     MainContent.Content = _modManagerView;
+                    break;
+                case "Graphics":
+                    BtnGraphics.Style = (Style)FindResource("SidebarButtonActiveStyle");
+                    _graphicsView?.Refresh();
+                    MainContent.Content = _graphicsView;
                     break;
             }
         }

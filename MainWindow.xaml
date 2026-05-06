@@ -172,6 +172,14 @@
               </StackPanel>
             </Button>
 
+            <Button x:Name="BtnGraphics" Style="{StaticResource SidebarButtonStyle}"
+                    Click="BtnGraphics_Click">
+              <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="🎨" FontSize="20" HorizontalAlignment="Center"/>
+                <TextBlock Text="Graphics" FontSize="10" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+              </StackPanel>
+            </Button>
+
           </StackPanel>
         </Border>
 
