@@ -155,7 +155,7 @@ namespace FiveMConfigEditorWPF.Models
         }
 
         // ── Graphics Preset Apply ──────────────────────────────────────────────
-        public static void ApplyGraphicsPreset(GraphicsPreset preset)
+        public static void ApplyGraphicsPreset(ModsPreset preset)
         {
             var mods    = ScanMods();
             var plugins = ScanPlugins();
@@ -175,9 +175,9 @@ namespace FiveMConfigEditorWPF.Models
             }
         }
 
-        public static GraphicsPreset CaptureCurrentState(string name, string description)
+        public static ModsPreset CaptureCurrentState(string name, string description)
         {
-            var preset = new GraphicsPreset { Name = name, Description = description };
+            var preset = new ModsPreset { Name = name, Description = description };
             foreach (var m in ScanMods())
                 preset.ModsState[m.Name] = m.IsEnabled;
             foreach (var p in ScanPlugins())

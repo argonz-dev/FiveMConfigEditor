@@ -241,6 +241,8 @@
     </ScrollViewer>
 
     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,14,0,0">
+      <Button Content="Load Preset" Style="{StaticResource GreenButtonStyle}" 
+              Margin="0,0,8,0" Click="BtnLoadPreset_Click"/>
       <Button Content="Save" Style="{StaticResource NeonButtonStyle}" 
               Margin="0,0,8,0" Click="BtnSave_Click"/>
       <Button Content="Save as Preset" Style="{StaticResource NeonButtonStyle}" 

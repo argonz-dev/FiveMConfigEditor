@@ -227,15 +227,35 @@ namespace FiveMConfigEditorWPF.Views
             {
                 SaveUIToData();
                 
-                // Save to file first
-                GtaGraphicsHelper.Save(_currentPath, _data);
-                
-                MessageBox.Show($"Graphics settings saved to:\n{_currentPath}\n\nYou can create a full preset from the Home page that includes both CitizenFX.ini and graphics settings.", 
-                    "Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+                var dialog = new Dialogs.GraphicsPresetDialog(_data);
+                dialog.Owner = Window.GetWindow(this);
+                dialog.ShowDialog();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Failed to save:\n{ex.Message}", "Error",
+                MessageBox.Show($"Failed to open preset dialog:\n{ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void BtnLoadPreset_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var dialog = new Dialogs.GraphicsPresetDialog(_data);
+                dialog.Owner = Window.GetWindow(this);
+                
+                if (dialog.ShowDialog() == true && dialog.SelectedPreset != null)
+                {
+                    _data = dialog.SelectedPreset.Data;
+                    LoadDataToUI();
+                    MessageBox.Show($"Preset '{dialog.SelectedPreset.Name}' loaded!\n\nKlik 'Save' untuk apply ke gta5_settings.xml", 
+                        "Preset Loaded", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load preset:\n{ex.Message}", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

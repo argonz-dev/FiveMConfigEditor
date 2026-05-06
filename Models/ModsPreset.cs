@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace FiveMConfigEditorWPF.Models
 {
-    public class GraphicsPreset
+    public class ModsPreset
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = "";
@@ -18,19 +18,19 @@ namespace FiveMConfigEditorWPF.Models
         public Dictionary<string, bool> PluginsState { get; set; } = new();
     }
 
-    public static class GraphicsPresetManager
+    public static class ModsPresetManager
     {
         private static readonly string StorePath =
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "graphics_presets.json");
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mods_presets.json");
 
-        public static List<GraphicsPreset> Load()
+        public static List<ModsPreset> Load()
         {
             if (!File.Exists(StorePath)) return new();
-            try { return JsonSerializer.Deserialize<List<GraphicsPreset>>(File.ReadAllText(StorePath)) ?? new(); }
+            try { return JsonSerializer.Deserialize<List<ModsPreset>>(File.ReadAllText(StorePath)) ?? new(); }
             catch { return new(); }
         }
 
-        public static void Save(List<GraphicsPreset> presets)
+        public static void Save(List<ModsPreset> presets)
         {
             File.WriteAllText(StorePath,
                 JsonSerializer.Serialize(presets, new JsonSerializerOptions { WriteIndented = true }));

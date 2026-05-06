@@ -17,7 +17,7 @@ namespace FiveMConfigEditorWPF.Views
         private readonly MainWindow _main;
         private List<ModItem> _mods    = new();
         private List<ModItem> _plugins = new();
-        private List<GraphicsPreset> _graphicsPresets = new();
+        private List<ModsPreset> _graphicsPresets = new();
         private DispatcherTimer? _statusTimer;
         private string _activeTab = "Mods";
 
@@ -29,7 +29,7 @@ namespace FiveMConfigEditorWPF.Views
 
         public void Refresh()
         {
-            _graphicsPresets = GraphicsPresetManager.Load();
+            _graphicsPresets = ModsPresetManager.Load();
             LoadMods();
             LoadPlugins();
             RenderActiveTab();
@@ -250,7 +250,7 @@ namespace FiveMConfigEditorWPF.Views
         }
 
         // ── Graphics Preset Card ───────────────────────────────────────────────
-        private Border CreatePresetCard(GraphicsPreset preset)
+        private Border CreatePresetCard(ModsPreset preset)
         {
             var card = new Border
             {
@@ -324,7 +324,7 @@ namespace FiveMConfigEditorWPF.Views
 
         private void ApplyPreset_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is not Button btn || btn.Tag is not GraphicsPreset preset) return;
+            if (sender is not Button btn || btn.Tag is not ModsPreset preset) return;
             try
             {
                 ModManager.ApplyGraphicsPreset(preset);
@@ -338,13 +338,13 @@ namespace FiveMConfigEditorWPF.Views
 
         private void DeletePreset_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is not Button btn || btn.Tag is not GraphicsPreset preset) return;
+            if (sender is not Button btn || btn.Tag is not ModsPreset preset) return;
             var result = MessageBox.Show($"Hapus preset \"{preset.Name}\"?", "Konfirmasi",
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result != MessageBoxResult.Yes) return;
 
             _graphicsPresets.Remove(preset);
-            GraphicsPresetManager.Save(_graphicsPresets);
+            ModsPresetManager.Save(_graphicsPresets);
             RenderGraphicsPresets();
             ShowStatus($"Preset \"{preset.Name}\" dihapus.");
         }
@@ -448,7 +448,7 @@ namespace FiveMConfigEditorWPF.Views
                             confirmDialog.BackupName,
                             "Backup otomatis sebelum import mod pack");
                         _graphicsPresets.Insert(0, backupPreset);
-                        GraphicsPresetManager.Save(_graphicsPresets);
+                        ModsPresetManager.Save(_graphicsPresets);
                         ShowStatus($"Backup preset \"{backupPreset.Name}\" dibuat.");
                     }
                     catch (Exception ex)
@@ -525,7 +525,7 @@ namespace FiveMConfigEditorWPF.Views
             {
                 var preset = ModManager.CaptureCurrentState(dialog.PresetName, dialog.PresetDescription);
                 _graphicsPresets.Insert(0, preset);
-                GraphicsPresetManager.Save(_graphicsPresets);
+                ModsPresetManager.Save(_graphicsPresets);
                 ShowStatus($"Preset \"{preset.Name}\" disimpan.");
                 if (_activeTab == "Presets") RenderGraphicsPresets();
             }
