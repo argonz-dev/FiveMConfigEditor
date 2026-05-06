@@ -27,8 +27,8 @@ git add .
 # Commit pertama
 git commit -m "Initial commit - FiveM Config Editor v1.0.0"
 
-# Tambahkan remote (ganti YOUR_USERNAME dengan username GitHub Anda)
-git remote add origin https://github.com/YOUR_USERNAME/FiveMConfigEditor.git
+# Tambahkan remote
+git remote add origin https://github.com/argonz-dev/FiveMConfigEditor.git
 
 # Push ke GitHub
 git branch -M main
@@ -37,55 +37,15 @@ git push -u origin main
 
 ---
 
-### 3️⃣ Update File update.xml
+### 3️⃣ File Sudah Dikonfigurasi ✅
 
-Edit file `update.xml` dan ganti `YOUR_USERNAME` dengan username GitHub Anda:
+File `update.xml` dan `MainWindow.xaml.cs` sudah dikonfigurasi dengan username GitHub Anda: **argonz-dev**
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<item>
-    <version>1.0.0.0</version>
-    <url>https://github.com/YOUR_USERNAME/FiveMConfigEditor/releases/download/v1.0.0/FiveMConfigEditorWPF.exe</url>
-    <changelog>https://github.com/YOUR_USERNAME/FiveMConfigEditor/releases/tag/v1.0.0</changelog>
-    <mandatory>false</mandatory>
-</item>
-```
-
-Commit dan push perubahan:
-
-```bash
-git add update.xml
-git commit -m "Update GitHub username in update.xml"
-git push
-```
+Tidak perlu edit manual lagi!
 
 ---
 
-### 4️⃣ Update MainWindow.xaml.cs
-
-Edit file `MainWindow.xaml.cs` di method `CheckForUpdates()`:
-
-Ganti baris ini:
-```csharp
-string updateUrl = "https://raw.githubusercontent.com/YOUR_USERNAME/FiveMConfigEditor/main/update.xml";
-```
-
-Dengan username GitHub Anda:
-```csharp
-string updateUrl = "https://raw.githubusercontent.com/YOUR_USERNAME/FiveMConfigEditor/main/update.xml";
-```
-
-Commit dan push:
-
-```bash
-git add MainWindow.xaml.cs
-git commit -m "Update GitHub username in auto-updater"
-git push
-```
-
----
-
-### 5️⃣ Buat GitHub Release (Setiap Update)
+### 4️⃣ Buat GitHub Release (Setiap Update)
 
 Setiap kali ada versi baru:
 
@@ -107,7 +67,7 @@ Setiap kali ada versi baru:
 5. **Update file update.xml** untuk versi berikutnya:
    ```xml
    <version>1.0.1.0</version>
-   <url>https://github.com/YOUR_USERNAME/FiveMConfigEditor/releases/download/v1.0.1/FiveMConfigEditorWPF.exe</url>
+   <url>https://github.com/argonz-dev/FiveMConfigEditor/releases/download/v1.0.1/FiveMConfigEditorWPF.exe</url>
    ```
 
 6. **Commit dan push update.xml:**
@@ -141,8 +101,8 @@ Setiap kali ada versi baru:
 ### Di `update.xml`:
 ```xml
 <version>1.0.1.0</version>
-<url>https://github.com/YOUR_USERNAME/FiveMConfigEditor/releases/download/v1.0.1/FiveMConfigEditorWPF.exe</url>
-<changelog>https://github.com/YOUR_USERNAME/FiveMConfigEditor/releases/tag/v1.0.1</changelog>
+<url>https://github.com/argonz-dev/FiveMConfigEditor/releases/download/v1.0.1/FiveMConfigEditorWPF.exe</url>
+<changelog>https://github.com/argonz-dev/FiveMConfigEditor/releases/tag/v1.0.1</changelog>
 ```
 
 ---

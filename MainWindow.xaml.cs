@@ -83,7 +83,7 @@ namespace FiveMConfigEditorWPF
                 
                 // GitHub raw URL for update.xml
                 // Format: https://raw.githubusercontent.com/USERNAME/REPO/main/update.xml
-                string updateUrl = "https://raw.githubusercontent.com/YOUR_USERNAME/FiveMConfigEditor/main/update.xml";
+                string updateUrl = "https://raw.githubusercontent.com/argonz-dev/FiveMConfigEditor/main/update.xml";
                 
                 AutoUpdater.Start(updateUrl);
             }

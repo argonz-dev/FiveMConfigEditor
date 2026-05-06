@@ -91,7 +91,7 @@ Modern WPF application untuk mengelola konfigurasi FiveM dengan mudah dan efisie
 
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/FiveMConfigEditor.git
+git clone https://github.com/argonz-dev/FiveMConfigEditor.git
 cd FiveMConfigEditor
 
 # Restore packages
@@ -177,7 +177,7 @@ This project is licensed under the MIT License.
 ## 📞 Support
 
 Jika ada masalah atau pertanyaan:
-1. Buka [Issues](https://github.com/YOUR_USERNAME/FiveMConfigEditor/issues)
+1. Buka [Issues](https://github.com/argonz-dev/FiveMConfigEditor/issues)
 2. Jelaskan masalah dengan detail
 3. Sertakan screenshot jika perlu
 
