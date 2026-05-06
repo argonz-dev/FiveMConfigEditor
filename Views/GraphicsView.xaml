@@ -224,14 +224,14 @@
             <TextBlock Text="LOD Scale" Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,5"/>
             <Slider x:Name="SliderLodScale" Minimum="0" Maximum="2" Value="1" 
                     TickFrequency="0.1" IsSnapToTickEnabled="True"
-                    Style="{StaticResource DarkSliderStyle}" Margin="0,0,0,4"/>
+                    Margin="0,0,0,4"/>
             <TextBlock x:Name="TxtLodScale" Text="1.0" Foreground="#FFAA8866" 
                        FontSize="10" HorizontalAlignment="Right" Margin="0,0,0,12"/>
 
             <TextBlock Text="City Density" Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,5"/>
             <Slider x:Name="SliderCityDensity" Minimum="0" Maximum="1" Value="1" 
                     TickFrequency="0.1" IsSnapToTickEnabled="True"
-                    Style="{StaticResource DarkSliderStyle}" Margin="0,0,0,4"/>
+                    Margin="0,0,0,4"/>
             <TextBlock x:Name="TxtCityDensity" Text="1.0" Foreground="#FFAA8866" 
                        FontSize="10" HorizontalAlignment="Right" Margin="0,0,0,12"/>
           </StackPanel>

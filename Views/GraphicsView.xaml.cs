@@ -20,20 +20,31 @@ namespace FiveMConfigEditorWPF.Views
             try
             {
                 InitializeComponent();
-                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"XAML Error:\n{ex.Message}\n\nInner:\n{ex.InnerException?.Message}", 
+                    "XAML Parse Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
                 // Set default path
                 _currentPath = GtaGraphicsHelper.GetDefaultPath();
                 
                 // Setup slider value changed events
-                SliderLodScale.ValueChanged += (s, e) => TxtLodScale.Text = e.NewValue.ToString("F1");
-                SliderCityDensity.ValueChanged += (s, e) => TxtCityDensity.Text = e.NewValue.ToString("F1");
+                if (SliderLodScale != null)
+                    SliderLodScale.ValueChanged += (s, e) => TxtLodScale.Text = e.NewValue.ToString("F1");
+                if (SliderCityDensity != null)
+                    SliderCityDensity.ValueChanged += (s, e) => TxtCityDensity.Text = e.NewValue.ToString("F1");
                 
                 Refresh();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error initializing Graphics View:\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}", 
-                    "Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Initialization Error:\n{ex.Message}\n\nStack:\n{ex.StackTrace}", 
+                    "Init Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
