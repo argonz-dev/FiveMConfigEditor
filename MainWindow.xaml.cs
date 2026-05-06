@@ -140,31 +140,18 @@ namespace FiveMConfigEditorWPF
                 _hasUpdateAvailable = false;
                 UpdateUpdateButtonState();
 
-                // Only show error if manually triggered
+                // Show friendly message if manually triggered, otherwise silent
                 if (_isManualUpdateCheck)
                 {
-                    if (args.Error is System.Net.WebException)
-                    {
-                        MessageBox.Show(
-                            "Tidak dapat memeriksa update.\nPastikan koneksi internet Anda aktif.",
-                            "Error",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            $"Error saat cek update:\n{args.Error.Message}",
-                            "Error",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-                    }
+                    MessageBox.Show(
+                        "Tidak dapat memeriksa update saat ini.\nSilakan coba lagi nanti.",
+                        "Info",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
                 }
-                else
-                {
-                    // Silent mode - just log the error
-                    System.Diagnostics.Debug.WriteLine($"Silent update check failed: {args.Error?.Message}");
-                }
+                
+                // Always log the error for debugging
+                System.Diagnostics.Debug.WriteLine($"Update check failed: {args.Error?.Message}");
             }
         }
 
