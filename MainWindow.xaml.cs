@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Controls;
 using FiveMConfigEditorWPF.Models;
 using FiveMConfigEditorWPF.Views;
 using AutoUpdaterDotNET;
@@ -16,6 +17,9 @@ namespace FiveMConfigEditorWPF
         private HistoryView? _historyView;
         private ModManagerView? _modManagerView;
         private GraphicsView? _graphicsView;
+        private bool _isCheckingUpdate = false;
+        private bool _hasUpdateAvailable = false;
+        private bool _isManualUpdateCheck = false;
 
         public MainWindow()
         {
@@ -64,36 +68,143 @@ namespace FiveMConfigEditorWPF
 
             NavigateTo("Home");
 
-            // Check for updates after window is loaded
-            Loaded += (s, e) => CheckForUpdates();
+            // Setup AutoUpdater event handlers
+            AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
+
+            // Check for updates after window is loaded (silent check)
+            Loaded += (s, e) => CheckForUpdates(silent: true);
         }
 
-        private void CheckForUpdates()
+        private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
         {
+            _isCheckingUpdate = false;
+            UpdateUpdateButtonState();
+
+            if (args.Error == null)
+            {
+                if (args.IsUpdateAvailable)
+                {
+                    _hasUpdateAvailable = true;
+                    UpdateUpdateButtonState();
+
+                    var result = MessageBox.Show(
+                        $"Update tersedia!\n\n" +
+                        $"Versi saat ini: {args.CurrentVersion}\n" +
+                        $"Versi baru: {args.InstalledVersion}\n\n" +
+                        $"Apakah Anda ingin update sekarang?",
+                        "Update Tersedia",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+                            if (AutoUpdater.DownloadUpdate(args))
+                            {
+                                Application.Current.Shutdown();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error saat download update:\n{ex.Message}", 
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
+                else
+                {
+                    _hasUpdateAvailable = false;
+                    UpdateUpdateButtonState();
+
+                    // Only show "up to date" message if manually triggered
+                    if (_isManualUpdateCheck)
+                    {
+                        MessageBox.Show(
+                            $"Aplikasi sudah up to date!\n\nVersi saat ini: {args.CurrentVersion}",
+                            "Up to Date",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                    }
+                }
+            }
+            else
+            {
+                if (args.Error is System.Net.WebException)
+                {
+                    MessageBox.Show(
+                        "Tidak dapat memeriksa update.\nPastikan koneksi internet Anda aktif.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"Error saat cek update:\n{args.Error.Message}",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void CheckForUpdates(bool silent = false)
+        {
+            if (_isCheckingUpdate) return;
+
+            _isCheckingUpdate = true;
+            _isManualUpdateCheck = !silent;
+            UpdateUpdateButtonState();
+
             try
             {
                 // Configure AutoUpdater
                 AutoUpdater.Mandatory = false;
                 AutoUpdater.UpdateMode = Mode.ForcedDownload;
-                AutoUpdater.ShowSkipButton = true;
-                AutoUpdater.ShowRemindLaterButton = true;
-                AutoUpdater.RemindLaterTimeSpan = RemindLaterFormat.Days;
-                AutoUpdater.RemindLaterAt = 1;
-                
-                // Set custom colors to match app theme
-                AutoUpdater.BasicAuthChangeLog = null;
+                AutoUpdater.ShowSkipButton = false;
+                AutoUpdater.ShowRemindLaterButton = false;
+                AutoUpdater.ReportErrors = !silent;
                 
                 // GitHub raw URL for update.xml
-                // Format: https://raw.githubusercontent.com/USERNAME/REPO/main/update.xml
                 string updateUrl = "https://raw.githubusercontent.com/argonz-dev/FiveMConfigEditor/main/update.xml";
                 
                 AutoUpdater.Start(updateUrl);
             }
             catch (Exception ex)
             {
-                // Silent fail - don't interrupt user experience
+                _isCheckingUpdate = false;
+                UpdateUpdateButtonState();
+
+                if (!silent)
+                {
+                    MessageBox.Show($"Error saat cek update:\n{ex.Message}", 
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 System.Diagnostics.Debug.WriteLine($"Update check failed: {ex.Message}");
             }
+        }
+
+        private void UpdateUpdateButtonState()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (_isCheckingUpdate)
+                {
+                    BtnCheckUpdate.Content = "⏳";
+                    BtnCheckUpdate.ToolTip = "Checking for updates...";
+                }
+                else if (_hasUpdateAvailable)
+                {
+                    BtnCheckUpdate.Content = "🔄!";
+                    BtnCheckUpdate.ToolTip = "Update available! Click to update";
+                }
+                else
+                {
+                    BtnCheckUpdate.Content = "🔄";
+                    BtnCheckUpdate.ToolTip = "Check for Updates";
+                }
+            });
         }
 
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -107,7 +218,7 @@ namespace FiveMConfigEditorWPF
 
         private void BtnCheckUpdate_Click(object sender, RoutedEventArgs e)
         {
-            CheckForUpdates();
+            CheckForUpdates(silent: false);
         }
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
