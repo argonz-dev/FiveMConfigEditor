@@ -1,0 +1,228 @@
+<UserControl x:Class="FiveMConfigEditorWPF.Views.ModManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+  <UserControl.Resources>
+
+    <!-- Toggle Button Style -->
+    <Style x:Key="ToggleEnableStyle" TargetType="Button">
+      <Setter Property="Width" Value="72"/>
+      <Setter Property="Height" Value="26"/>
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="5">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Bd" Property="Opacity" Value="0.8"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- Tab Button Style -->
+    <Style x:Key="TabBtnStyle" TargetType="Button">
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="16,0"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Foreground" Value="#FF888888"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                    BorderThickness="0,0,0,2" BorderBrush="Transparent">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Bd" Property="BorderBrush" Value="#FFFF8C00"/>
+                <Setter Property="Foreground" Value="#FFE0E0E0"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style x:Key="TabBtnActiveStyle" TargetType="Button" BasedOn="{StaticResource TabBtnStyle}">
+      <Setter Property="Foreground" Value="#FFFF8C00"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                    BorderThickness="0,0,0,2" BorderBrush="#FFFF8C00">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- Small Action Button -->
+    <Style x:Key="SmallActionBtn" TargetType="Button">
+      <Setter Property="Height" Value="26"/>
+      <Setter Property="Padding" Value="10,0"/>
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="5">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Bd" Property="Opacity" Value="0.8"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+  </UserControl.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header -->
+    <Border Grid.Row="0" Background="#FF1F1410" Padding="20,14">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+          <TextBlock Text="🎮 Mod Manager" Foreground="#FFFF8C00"
+                     FontSize="16" FontWeight="Bold"/>
+          <TextBlock x:Name="TxtSubtitle" Text="Kelola mods dan plugins FiveM"
+                     Foreground="#FFAA8866" FontSize="11" Margin="0,2,0,0"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+          <Button x:Name="BtnExportPack" Content="📦 Export Pack" Click="BtnExportPack_Click"
+                  Style="{StaticResource SmallActionBtn}"
+                  Background="#FF1A4A5C" Margin="0,0,8,0"/>
+          <Button x:Name="BtnImportPack" Content="📥 Import Pack" Click="BtnImportPack_Click"
+                  Style="{StaticResource SmallActionBtn}"
+                  Background="#FF4A1A5C" Margin="0,0,8,0"/>
+          <Button x:Name="BtnRefresh" Content="🔄 Refresh" Click="BtnRefresh_Click"
+                  Style="{StaticResource SmallActionBtn}"
+                  Background="#FF1A3A5C" Margin="0,0,8,0"/>
+          <Button x:Name="BtnSavePreset" Content="💾 Simpan Preset" Click="BtnSavePreset_Click"
+                  Style="{StaticResource SmallActionBtn}"
+                  Background="#FF1A4A2A"/>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Tabs -->
+    <Border Grid.Row="1" Background="#FF0F0A08" BorderBrush="#FF4A3020" BorderThickness="0,0,0,1">
+      <StackPanel Orientation="Horizontal" Margin="12,0">
+        <Button x:Name="TabMods" Content="📦 Mods (RPF)" Style="{StaticResource TabBtnActiveStyle}"
+                Click="TabMods_Click"/>
+        <Button x:Name="TabPlugins" Content="🔌 Plugins" Style="{StaticResource TabBtnStyle}"
+                Click="TabPlugins_Click"/>
+        <Button x:Name="TabPresets" Content="🎨 Graphics Presets" Style="{StaticResource TabBtnStyle}"
+                Click="TabPresets_Click"/>
+      </StackPanel>
+    </Border>
+
+    <!-- Content Panels -->
+    <Grid Grid.Row="2">
+
+      <!-- MODS PANEL -->
+      <Grid x:Name="PanelMods">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Mods Stats Bar -->
+        <Border Grid.Row="0" Background="#FF1F1410" Padding="16,8">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock x:Name="TxtModsStats" Text="Memuat..." Foreground="#FFAA8866" FontSize="11"/>
+            <Button Content="✅ Aktifkan Semua" Click="BtnEnableAllMods_Click"
+                    Style="{StaticResource SmallActionBtn}"
+                    Background="#FF1A4A2A" Margin="16,0,6,0"/>
+            <Button Content="⛔ Nonaktifkan Semua" Click="BtnDisableAllMods_Click"
+                    Style="{StaticResource SmallActionBtn}"
+                    Background="#FF4A1A1A"/>
+          </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      Style="{StaticResource DarkScrollViewerStyle}">
+          <StackPanel x:Name="ModsList" Margin="12,8"/>
+        </ScrollViewer>
+      </Grid>
+
+      <!-- PLUGINS PANEL -->
+      <Grid x:Name="PanelPlugins" Visibility="Collapsed">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#FF1F1410" Padding="16,8">
+          <StackPanel Orientation="Horizontal">
+            <TextBlock x:Name="TxtPluginsStats" Text="Memuat..." Foreground="#FFAA8866" FontSize="11"/>
+            <Button Content="✅ Aktifkan Semua" Click="BtnEnableAllPlugins_Click"
+                    Style="{StaticResource SmallActionBtn}"
+                    Background="#FF1A4A2A" Margin="16,0,6,0"/>
+            <Button Content="⛔ Nonaktifkan Semua" Click="BtnDisableAllPlugins_Click"
+                    Style="{StaticResource SmallActionBtn}"
+                    Background="#FF4A1A1A"/>
+          </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      Style="{StaticResource DarkScrollViewerStyle}">
+          <StackPanel x:Name="PluginsList" Margin="12,8"/>
+        </ScrollViewer>
+      </Grid>
+
+      <!-- GRAPHICS PRESETS PANEL -->
+      <Grid x:Name="PanelPresets" Visibility="Collapsed">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#FF1F1410" Padding="16,8">
+          <TextBlock Text="Simpan dan terapkan konfigurasi mods+plugins sebagai preset grafis."
+                     Foreground="#FFAA8866" FontSize="11"/>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      Style="{StaticResource DarkScrollViewerStyle}">
+          <StackPanel x:Name="PresetsList" Margin="12,8"/>
+        </ScrollViewer>
+      </Grid>
+
+    </Grid>
+
+    <!-- Status Bar -->
+    <Border Grid.Row="3" Background="#FF0F0A08" Padding="16,6">
+      <TextBlock x:Name="TxtStatus" Text="" Foreground="#FF2ECC71" FontSize="11"/>
+    </Border>
+
+  </Grid>
+</UserControl>

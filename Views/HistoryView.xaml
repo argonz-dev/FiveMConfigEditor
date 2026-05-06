@@ -1,0 +1,68 @@
+<UserControl x:Class="FiveMConfigEditorWPF.Views.HistoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+  <Grid Margin="20,16,20,16">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header -->
+    <TextBlock Grid.Row="0" Text="📋 Status CitizenFX.ini" Foreground="White"
+               FontSize="16" FontWeight="Bold" Margin="0,0,0,14"/>
+
+    <!-- Status Card -->
+    <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="16,12" Margin="0,0,0,16">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- File Path -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+          <TextBlock Text="📄 File:" Foreground="#FFAA8866" FontSize="12" Width="80"/>
+          <TextBlock x:Name="TxtFilePath" Text="Belum dipilih" Foreground="#FFE0E0E0" FontSize="12"/>
+        </StackPanel>
+
+        <!-- Status -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,8">
+          <TextBlock Text="🔍 Status:" Foreground="#FFAA8866" FontSize="12" Width="80"/>
+          <TextBlock x:Name="TxtStatus" Text="Memuat..." Foreground="#FFAA8866" FontSize="12"/>
+        </StackPanel>
+
+        <!-- Save Button (hidden by default) -->
+        <Button x:Name="BtnSaveAsPreset" Grid.Row="2" 
+                Content="💾 Simpan sebagai Preset Baru"
+                Style="{StaticResource NeonButtonStyle}"
+                Click="BtnSaveAsPreset_Click"
+                Visibility="Collapsed"
+                HorizontalAlignment="Left"
+                Margin="0,8,0,0"/>
+      </Grid>
+    </Border>
+
+    <!-- Current Config Display -->
+    <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#FF1F1410" Padding="12,8">
+          <TextBlock Text="Konfigurasi Saat Ini" Foreground="#FFFF8C00" FontSize="12" FontWeight="SemiBold"/>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      Style="{StaticResource DarkScrollViewerStyle}">
+          <StackPanel x:Name="ConfigPanel" Margin="12,8"/>
+        </ScrollViewer>
+      </Grid>
+    </Border>
+
+  </Grid>
+</UserControl>
