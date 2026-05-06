@@ -16,16 +16,25 @@ namespace FiveMConfigEditorWPF.Views
         public GraphicsView(MainWindow main)
         {
             _main = main;
-            InitializeComponent();
             
-            // Set default path
-            _currentPath = GtaGraphicsHelper.GetDefaultPath();
-            
-            // Setup slider value changed events
-            SliderLodScale.ValueChanged += (s, e) => TxtLodScale.Text = e.NewValue.ToString("F1");
-            SliderCityDensity.ValueChanged += (s, e) => TxtCityDensity.Text = e.NewValue.ToString("F1");
-            
-            Refresh();
+            try
+            {
+                InitializeComponent();
+                
+                // Set default path
+                _currentPath = GtaGraphicsHelper.GetDefaultPath();
+                
+                // Setup slider value changed events
+                SliderLodScale.ValueChanged += (s, e) => TxtLodScale.Text = e.NewValue.ToString("F1");
+                SliderCityDensity.ValueChanged += (s, e) => TxtCityDensity.Text = e.NewValue.ToString("F1");
+                
+                Refresh();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error initializing Graphics View:\n{ex.Message}\n\nStack Trace:\n{ex.StackTrace}", 
+                    "Initialization Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void Refresh()
@@ -56,45 +65,67 @@ namespace FiveMConfigEditorWPF.Views
 
         private void LoadDataToUI()
         {
-            // Texture & Quality
-            CmbTextureQuality.SelectedIndex = Math.Clamp(_data.TextureQuality, 0, 4);
-            CmbShaderQuality.SelectedIndex = Math.Clamp(_data.ShaderQuality, 0, 4);
-            CmbAnisotropic.SelectedIndex = _data.AnisotropicFiltering switch
+            try
             {
-                0 => 0,
-                2 => 1,
-                4 => 2,
-                8 => 3,
-                16 => 4,
-                _ => 4
-            };
+                // Texture & Quality
+                CmbTextureQuality.SelectedIndex = Clamp(_data.TextureQuality, 0, 4);
+                CmbShaderQuality.SelectedIndex = Clamp(_data.ShaderQuality, 0, 4);
+                CmbAnisotropic.SelectedIndex = _data.AnisotropicFiltering switch
+                {
+                    0 => 0,
+                    2 => 1,
+                    4 => 2,
+                    8 => 3,
+                    16 => 4,
+                    _ => 4
+                };
 
-            // Shadows
-            CmbShadowQuality.SelectedIndex = Math.Clamp(_data.ShadowQuality, 0, 4);
-            CmbSoftShadows.SelectedIndex = Math.Clamp(_data.Shadow_SoftShadows, 0, 5);
-            ChkLongShadows.IsChecked = _data.Shadow_LongShadows;
-            ChkParticleShadows.IsChecked = _data.Shadow_ParticleShadows;
+                // Shadows
+                CmbShadowQuality.SelectedIndex = Clamp(_data.ShadowQuality, 0, 4);
+                CmbSoftShadows.SelectedIndex = Clamp(_data.Shadow_SoftShadows, 0, 5);
+                ChkLongShadows.IsChecked = _data.Shadow_LongShadows;
+                ChkParticleShadows.IsChecked = _data.Shadow_ParticleShadows;
 
-            // Reflections & Effects
-            CmbReflectionQuality.SelectedIndex = Math.Clamp(_data.ReflectionQuality, 0, 4);
-            CmbWaterQuality.SelectedIndex = Math.Clamp(_data.WaterQuality, 0, 2);
-            CmbParticleQuality.SelectedIndex = Math.Clamp(_data.ParticleQuality, 0, 3);
-            CmbGrassQuality.SelectedIndex = Math.Clamp(_data.GrassQuality, 0, 4);
+                // Reflections & Effects
+                CmbReflectionQuality.SelectedIndex = Clamp(_data.ReflectionQuality, 0, 4);
+                CmbWaterQuality.SelectedIndex = Clamp(_data.WaterQuality, 0, 2);
+                CmbParticleQuality.SelectedIndex = Clamp(_data.ParticleQuality, 0, 3);
+                CmbGrassQuality.SelectedIndex = Clamp(_data.GrassQuality, 0, 4);
 
-            // Anti-Aliasing
-            CmbMSAA.SelectedIndex = Math.Clamp(_data.MSAA, 0, 3);
-            ChkFXAA.IsChecked = _data.FXAA_Enabled;
-            ChkTXAA.IsChecked = _data.TXAA_Enabled;
+                // Anti-Aliasing
+                CmbMSAA.SelectedIndex = Clamp(_data.MSAA, 0, 3);
+                ChkFXAA.IsChecked = _data.FXAA_Enabled;
+                ChkTXAA.IsChecked = _data.TXAA_Enabled;
 
-            // Post Processing
-            CmbPostFX.SelectedIndex = Math.Clamp(_data.PostFX, 0, 4);
-            ChkDoF.IsChecked = _data.DoF;
-            ChkSSAO.IsChecked = _data.SSAO > 0;
+                // Post Processing
+                CmbPostFX.SelectedIndex = Clamp(_data.PostFX, 0, 4);
+                ChkDoF.IsChecked = _data.DoF;
+                ChkSSAO.IsChecked = _data.SSAO > 0;
 
-            // Advanced
-            CmbTessellation.SelectedIndex = Math.Clamp(_data.Tessellation, 0, 4);
-            SliderLodScale.Value = Math.Clamp(_data.LodScale, 0, 2);
-            SliderCityDensity.Value = Math.Clamp(_data.CityDensity, 0, 1);
+                // Advanced
+                CmbTessellation.SelectedIndex = Clamp(_data.Tessellation, 0, 4);
+                SliderLodScale.Value = ClampDouble(_data.LodScale, 0, 2);
+                SliderCityDensity.Value = ClampDouble(_data.CityDensity, 0, 1);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading data to UI:\n{ex.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private int Clamp(int value, int min, int max)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
+        }
+
+        private double ClampDouble(float value, double min, double max)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
         }
 
         private void SaveUIToData()
