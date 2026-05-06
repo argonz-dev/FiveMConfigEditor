@@ -2,9 +2,23 @@
 
 Modern WPF application untuk mengelola konfigurasi FiveM dengan mudah dan efisien.
 
-![Version](https://img.shields.io/badge/version-1.0.0-orange)
+![Version](https://img.shields.io/badge/version-1.0.3-orange)
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
 ![Platform](https://img.shields.io/badge/platform-Windows-blue)
+
+## ⚠️ Antivirus False Positive Warning
+
+**This application may be flagged by some antivirus software as a false positive.** This is common for self-contained .NET applications with auto-update functionality.
+
+✅ **The app is completely safe and open source.**
+
+- All source code is available for review
+- No malicious code or behavior
+- Used by the FiveM community
+
+**How to fix:** Add the executable to your antivirus exclusions or [read more about why this happens](ANTIVIRUS_FALSE_POSITIVE.md).
+
+---
 
 ## ✨ Fitur Utama
 
