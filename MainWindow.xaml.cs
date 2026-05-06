@@ -72,7 +72,8 @@ namespace FiveMConfigEditorWPF
             AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
 
             // Check for updates after window is loaded (silent check)
-            Loaded += (s, e) => CheckForUpdates(silent: true);
+            // DISABLED: Uncomment when GitHub repository is ready
+            // Loaded += (s, e) => CheckForUpdates(silent: true);
         }
 
         private void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
