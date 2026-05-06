@@ -11,6 +11,7 @@ namespace FiveMConfigEditorWPF.Models
         public string ReplaceExecutable { get; set; } = "0";
         public Dictionary<string, int> PoolSizes { get; set; } = new();
         public string ReShade5 { get; set; } = "";
+        public string UpdateChannel { get; set; } = "production"; // beta or production
     }
 
     public static class IniHelper
@@ -33,6 +34,8 @@ namespace FiveMConfigEditorWPF.Models
                     data.SavedBuildNumber = trimmed["SavedBuildNumber=".Length..];
                 else if (trimmed.StartsWith("ReplaceExecutable="))
                     data.ReplaceExecutable = trimmed["ReplaceExecutable=".Length..];
+                else if (trimmed.StartsWith("UpdateChannel="))
+                    data.UpdateChannel = trimmed["UpdateChannel=".Length..];
                 else if (trimmed.StartsWith("PoolSizesIncrease="))
                 {
                     var json = trimmed["PoolSizesIncrease=".Length..];
@@ -56,6 +59,7 @@ namespace FiveMConfigEditorWPF.Models
                 "[Game]",
                 $"IVPath={data.IVPath}",
                 $"SavedBuildNumber={data.SavedBuildNumber}",
+                $"UpdateChannel={data.UpdateChannel}",
                 $"PoolSizesIncrease={poolJson}",
                 $"ReplaceExecutable={data.ReplaceExecutable}",
                 "",

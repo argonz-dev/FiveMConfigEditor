@@ -20,8 +20,22 @@ namespace FiveMConfigEditorWPF.Views
         public void Refresh()
         {
             var d = AppState.Data ?? new IniData();
-            TxtFiveMPath.Text       = AppState.FiveMPath;
-            TxtReShade5.Text        = d.ReShade5;
+            TxtFiveMPath.Text = AppState.FiveMPath;
+            TxtReShade5.Text = d.ReShade5;
+            
+            // Set UpdateChannel ComboBox
+            foreach (ComboBoxItem item in CmbUpdateChannel.Items)
+            {
+                if (item.Tag.ToString() == d.UpdateChannel)
+                {
+                    CmbUpdateChannel.SelectedItem = item;
+                    break;
+                }
+            }
+            
+            // Default to production if not set
+            if (CmbUpdateChannel.SelectedItem == null)
+                CmbUpdateChannel.SelectedIndex = 0;
         }
 
         private void BtnBrowseFiveM_Click(object sender, RoutedEventArgs e)
@@ -62,6 +76,18 @@ namespace FiveMConfigEditorWPF.Views
                 try
                 {
                     AppState.Data = IniHelper.Load(iniPath);
+                    
+                    // Update with current values
+                    AppState.Data.ReShade5 = TxtReShade5.Text.Trim();
+                    var selectedItem = CmbUpdateChannel.SelectedItem as ComboBoxItem;
+                    if (selectedItem != null)
+                    {
+                        AppState.Data.UpdateChannel = selectedItem.Tag.ToString() ?? "production";
+                    }
+                    
+                    // Save back
+                    IniHelper.Save(iniPath, AppState.Data);
+                    
                     MessageBox.Show($"Konfigurasi disimpan.\n\nCitizenFX.ini terdeteksi dan dimuat:\n{iniPath}", "Sukses",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                     
@@ -81,6 +107,14 @@ namespace FiveMConfigEditorWPF.Views
                 if (!string.IsNullOrEmpty(AppState.IniPath))
                 {
                     AppState.Data.ReShade5 = TxtReShade5.Text.Trim();
+                    
+                    // Save UpdateChannel
+                    var selectedItem = CmbUpdateChannel.SelectedItem as ComboBoxItem;
+                    if (selectedItem != null)
+                    {
+                        AppState.Data.UpdateChannel = selectedItem.Tag.ToString() ?? "production";
+                    }
+                    
                     IniHelper.Save(AppState.IniPath, AppState.Data);
                 }
                 

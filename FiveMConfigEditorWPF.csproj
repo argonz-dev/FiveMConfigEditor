@@ -8,9 +8,9 @@
     <AssemblyName>FiveMConfigEditorWPF</AssemblyName>
     <RootNamespace>FiveMConfigEditorWPF</RootNamespace>
     <ApplicationIcon>app_icon.ico</ApplicationIcon>
-    <Version>1.0.2.0</Version>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <Version>1.0.3.0</Version>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
     <Company>FiveM Config Editor</Company>
     <Product>FiveM Config Editor</Product>
     <Copyright>Copyright © 2026</Copyright>

@@ -48,6 +48,23 @@
                 </TextBlock>
               </StackPanel>
             </Border>
+
+            <TextBlock Text="Update Channel" Foreground="#FFAA8866" FontSize="11" Margin="0,14,0,5"/>
+            <ComboBox x:Name="CmbUpdateChannel" Style="{StaticResource DarkComboBoxStyle}" Margin="0,0,0,8">
+              <ComboBoxItem Content="Production (Stable)" Tag="production"/>
+              <ComboBoxItem Content="Beta (Latest Features)" Tag="beta"/>
+            </ComboBox>
+            <Border Background="#0FFF8C00" BorderBrush="#33FF8C00" BorderThickness="1"
+                    CornerRadius="6" Padding="10,8">
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="ℹ" Foreground="#FFFF8C00" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                <TextBlock Foreground="#FFAA8866" FontSize="10" TextWrapping="Wrap">
+                  <Run Text="Production: Versi stabil dan teruji"/>
+                  <LineBreak/>
+                  <Run Text="Beta: Versi terbaru dengan fitur baru (mungkin tidak stabil)"/>
+                </TextBlock>
+              </StackPanel>
+            </Border>
           </StackPanel>
         </Border>
 
