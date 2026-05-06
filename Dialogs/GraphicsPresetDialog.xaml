@@ -38,14 +38,21 @@
             <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
 
-          <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
-            <TextBlock Text="Preset Name:" Foreground="#FFAA8866" FontSize="11" 
+          <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Text="Preset Name:" Foreground="#FFAA8866" FontSize="11" 
                        VerticalAlignment="Center" Margin="0,0,8,0"/>
-            <TextBox x:Name="TxtPresetName" Width="200" 
-                     Style="{StaticResource DarkTextBoxStyle}" Margin="0,0,8,0"/>
-            <Button Content="Save Current" Style="{StaticResource NeonButtonSmallStyle}"
+            <TextBox Grid.Column="1" x:Name="TxtPresetName" 
+                     Style="{StaticResource DarkTextBoxStyle}" Margin="0,0,8,0" Height="32"/>
+            <Button Grid.Column="2" Content="Save Current" Width="100" Height="32"
+                    Style="{StaticResource NeonButtonSmallStyle}"
                     Click="BtnSavePreset_Click"/>
-          </StackPanel>
+          </Grid>
 
           <ScrollViewer Grid.Row="1" Style="{StaticResource DarkScrollViewerStyle}"
                         VerticalScrollBarVisibility="Auto">
@@ -54,7 +61,7 @@
               <ListBox.ItemTemplate>
                 <DataTemplate>
                   <Border Background="#FF2A1810" BorderBrush="#FF4A3020" BorderThickness="1"
-                          CornerRadius="8" Padding="12,8" Margin="0,0,0,8">
+                          CornerRadius="8" Padding="10,8" Margin="0,0,0,8">
                     <Grid>
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -63,20 +70,20 @@
 
                       <StackPanel Grid.Column="0">
                         <TextBlock Text="{Binding Name}" Foreground="White" 
-                                   FontSize="13" FontWeight="Bold" Margin="0,0,0,4"/>
+                                   FontSize="12" FontWeight="Bold" Margin="0,0,0,3"/>
                         <TextBlock Text="{Binding Description}" Foreground="#FFAA8866" 
-                                   FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"/>
-                        <TextBlock Foreground="#FF888888" FontSize="9">
+                                   FontSize="9" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                        <TextBlock Foreground="#FF888888" FontSize="8">
                           <Run Text="Created: "/>
                           <Run Text="{Binding CreatedAt, StringFormat='dd/MM/yyyy HH:mm'}"/>
                         </TextBlock>
                       </StackPanel>
 
                       <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button Content="Load" Width="60" Margin="0,0,4,0"
+                        <Button Content="Load" Width="55" Height="28" Margin="0,0,4,0"
                                 Style="{StaticResource GreenButtonSmallStyle}"
                                 Tag="{Binding}" Click="BtnLoadPreset_Click"/>
-                        <Button Content="Delete" Width="60"
+                        <Button Content="Delete" Width="55" Height="28"
                                 Style="{StaticResource RedButtonSmallStyle}"
                                 Tag="{Binding}" Click="BtnDeletePreset_Click"/>
                       </StackPanel>
