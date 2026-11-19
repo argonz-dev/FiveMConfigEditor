@@ -9,8 +9,8 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner">
 
-  <Border CornerRadius="12" Background="#FF1A0F0A"
-          BorderBrush="#FF4A3020" BorderThickness="1">
+  <Border CornerRadius="8" Background="#FF0D1117"
+          BorderBrush="#FF21262D" BorderThickness="1">
     <Border.Effect>
       <DropShadowEffect Color="#FF8C00" BlurRadius="20" ShadowDepth="0" Opacity="0.4"/>
     </Border.Effect>
@@ -27,7 +27,7 @@
         <TextBlock Text="Graphics Presets" Foreground="White"
                    FontSize="16" FontWeight="Bold" Margin="0,0,0,6"/>
         <TextBlock Text="Simpan dan muat preset graphics settings"
-                   Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,8"/>
+                   Foreground="#FF8B949E" FontSize="11" Margin="0,0,0,8"/>
         
         <!-- Current Settings Info -->
         <Border Background="#0FFF8C00" BorderBrush="#33FF8C00" BorderThickness="1"
@@ -35,7 +35,7 @@
           <StackPanel>
             <TextBlock Text="Current Settings:" Foreground="#FFFF8C00" FontSize="10" 
                        FontWeight="Bold" Margin="0,0,0,3"/>
-            <TextBlock x:Name="TxtCurrentSettings" Foreground="#FFAA8866" FontSize="9" TextWrapping="Wrap"/>
+            <TextBlock x:Name="TxtCurrentSettings" Foreground="#FF8B949E" FontSize="9" TextWrapping="Wrap"/>
           </StackPanel>
         </Border>
       </StackPanel>
@@ -55,7 +55,7 @@
               <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             
-            <TextBlock Grid.Column="0" Text="Preset Name:" Foreground="#FFAA8866" FontSize="11" 
+            <TextBlock Grid.Column="0" Text="Preset Name:" Foreground="#FF8B949E" FontSize="11" 
                        VerticalAlignment="Center" Margin="0,0,8,0"/>
             <TextBox Grid.Column="1" x:Name="TxtPresetName" 
                      Style="{StaticResource DarkTextBoxStyle}" Margin="0,0,8,0" Height="32"/>
@@ -70,7 +70,7 @@
                      SelectionChanged="LstPresets_SelectionChanged">
               <ListBox.ItemTemplate>
                 <DataTemplate>
-                  <Border Background="#FF2A1810" BorderBrush="#FF4A3020" BorderThickness="1"
+                  <Border Background="#FF0D1117" BorderBrush="#FF21262D" BorderThickness="1"
                           CornerRadius="8" Padding="10,8" Margin="0,0,0,8">
                     <Grid>
                       <Grid.ColumnDefinitions>
@@ -81,7 +81,7 @@
                       <StackPanel Grid.Column="0">
                         <TextBlock Text="{Binding Name}" Foreground="White" 
                                    FontSize="12" FontWeight="Bold" Margin="0,0,0,3"/>
-                        <TextBlock Text="{Binding Description}" Foreground="#FFAA8866" 
+                        <TextBlock Text="{Binding Description}" Foreground="#FF8B949E" 
                                    FontSize="9" TextWrapping="Wrap" Margin="0,0,0,3"/>
                         <TextBlock Foreground="#FF888888" FontSize="8">
                           <Run Text="Created: "/>

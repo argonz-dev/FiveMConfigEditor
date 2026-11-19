@@ -15,8 +15,11 @@ namespace FiveMConfigEditorWPF.Dialogs
         private readonly Preset _preset;
         private ObservableCollection<PoolEntry> _poolEntries = new();
         private bool _isManualTab = false;
+        private string _updateChannel = "production";
 
-        private static readonly SolidColorBrush ActiveBg   = new(Color.FromRgb(0x00, 0x78, 0xD4));
+        public bool ApplyAfterSave { get; private set; } = false;
+
+        private static readonly SolidColorBrush ActiveBg   = new(Color.FromRgb(0xFF, 0x7A, 0x00));
         private static readonly SolidColorBrush InactiveBg = new(Color.FromRgb(0x1E, 0x1E, 0x32));
         private static readonly SolidColorBrush ActiveFg   = new(Colors.White);
         private static readonly SolidColorBrush InactiveFg = new(Color.FromRgb(0x88, 0x88, 0x88));
@@ -33,8 +36,10 @@ namespace FiveMConfigEditorWPF.Dialogs
         private void LoadFromPreset()
         {
             var d = _preset.Data;
+            _updateChannel          = string.IsNullOrWhiteSpace(d.UpdateChannel) ? "production" : d.UpdateChannel;
             TxtIVPath.Text          = d.IVPath;
             TxtBuildNumber.Text     = d.SavedBuildNumber;
+            TxtDefaultBuild.Text    = d.DefaultBuild;
             ChkReplaceExe.IsChecked = d.ReplaceExecutable == "1";
             TxtReShade5.Text        = d.ReShade5;
             _poolEntries.Clear();
@@ -48,10 +53,14 @@ namespace FiveMConfigEditorWPF.Dialogs
             string poolJson = d.PoolSizes.Count == 0
                 ? "{}"
                 : JsonSerializer.Serialize(d.PoolSizes);
+            string channel = string.IsNullOrWhiteSpace(d.UpdateChannel) ? "production" : d.UpdateChannel;
             var sb = new StringBuilder();
             sb.AppendLine("[Game]");
             sb.AppendLine($"IVPath={d.IVPath}");
             sb.AppendLine($"SavedBuildNumber={d.SavedBuildNumber}");
+            if (!string.IsNullOrWhiteSpace(d.DefaultBuild))
+                sb.AppendLine($"DefaultBuild={d.DefaultBuild}");
+            sb.AppendLine($"UpdateChannel={channel}");
             sb.AppendLine($"PoolSizesIncrease={poolJson}");
             sb.AppendLine($"ReplaceExecutable={d.ReplaceExecutable}");
             sb.AppendLine();
@@ -89,8 +98,10 @@ namespace FiveMConfigEditorWPF.Dialogs
         private void BtnParseRaw_Click(object sender, RoutedEventArgs e)
         {
             var parsed = IniHelper.ParseText(TxtRawIni.Text);
+            _updateChannel          = string.IsNullOrWhiteSpace(parsed.UpdateChannel) ? "production" : parsed.UpdateChannel;
             TxtIVPath.Text          = parsed.IVPath;
             TxtBuildNumber.Text     = parsed.SavedBuildNumber;
+            TxtDefaultBuild.Text    = parsed.DefaultBuild;
             ChkReplaceExe.IsChecked = parsed.ReplaceExecutable == "1";
             TxtReShade5.Text        = parsed.ReShade5;
             _poolEntries.Clear();
@@ -136,11 +147,24 @@ namespace FiveMConfigEditorWPF.Dialogs
         }
 
         // ── Save / Cancel ─────────────────────────────────────────────────────
-        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        private void SavePresetData()
         {
             _preset.Data = _isManualTab
                 ? IniHelper.ParseText(TxtRawIni.Text)
                 : CollectFormData();
+        }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            ApplyAfterSave = false;
+            SavePresetData();
+            DialogResult = true;
+        }
+
+        private void BtnSaveAndApply_Click(object sender, RoutedEventArgs e)
+        {
+            ApplyAfterSave = true;
+            SavePresetData();
             DialogResult = true;
         }
 
@@ -152,14 +176,21 @@ namespace FiveMConfigEditorWPF.Dialogs
             if (e.ButtonState == MouseButtonState.Pressed) DragMove();
         }
 
-        private IniData CollectFormData() => new()
+        private IniData CollectFormData()
         {
-            IVPath            = TxtIVPath.Text.Trim(),
-            SavedBuildNumber  = TxtBuildNumber.Text.Trim(),
-            ReplaceExecutable = ChkReplaceExe.IsChecked == true ? "1" : "0",
-            ReShade5          = TxtReShade5.Text.Trim(),
-            PoolSizes         = CollectPools()
-        };
+            GridPools.CommitEdit(System.Windows.Controls.DataGridEditingUnit.Cell, true);
+            GridPools.CommitEdit(System.Windows.Controls.DataGridEditingUnit.Row, true);
+            return new()
+            {
+                IVPath            = TxtIVPath.Text.Trim(),
+                SavedBuildNumber  = TxtBuildNumber.Text.Trim(),
+                DefaultBuild      = TxtDefaultBuild.Text.Trim(),
+                ReplaceExecutable = ChkReplaceExe.IsChecked == true ? "1" : "0",
+                ReShade5          = TxtReShade5.Text.Trim(),
+                UpdateChannel     = _updateChannel,
+                PoolSizes         = CollectPools()
+            };
+        }
 
         private Dictionary<string, int> CollectPools()
         {

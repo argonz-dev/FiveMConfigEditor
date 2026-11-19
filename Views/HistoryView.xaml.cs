@@ -29,7 +29,7 @@ namespace FiveMConfigEditorWPF.Views
             if (string.IsNullOrEmpty(AppState.IniPath))
             {
                 TxtStatus.Text = "Pilih file CitizenFX.ini di halaman Home";
-                TxtStatus.Foreground = new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88));
+                TxtStatus.Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x94, 0x9E));
                 BtnSaveAsPreset.Visibility = Visibility.Collapsed;
                 ConfigPanel.Children.Clear();
                 return;
@@ -41,13 +41,13 @@ namespace FiveMConfigEditorWPF.Views
             if (_hasChanges)
             {
                 TxtStatus.Text = "⚠ Konfigurasi berbeda dari semua preset yang tersimpan";
-                TxtStatus.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xA5, 0x00)); // Orange
+                TxtStatus.Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0x7A, 0x00)); // Orange
                 BtnSaveAsPreset.Visibility = Visibility.Visible;
             }
             else
             {
                 TxtStatus.Text = "✓ Konfigurasi cocok dengan preset yang tersimpan";
-                TxtStatus.Foreground = new SolidColorBrush(Color.FromRgb(0x2E, 0xCC, 0x71)); // Green
+                TxtStatus.Foreground = new SolidColorBrush(Color.FromRgb(0x23, 0x86, 0x36)); // Green
                 BtnSaveAsPreset.Visibility = Visibility.Collapsed;
             }
 
@@ -71,6 +71,7 @@ namespace FiveMConfigEditorWPF.Views
         {
             if (a.IVPath != b.IVPath) return false;
             if (a.SavedBuildNumber != b.SavedBuildNumber) return false;
+            if (a.DefaultBuild != b.DefaultBuild) return false;
             if (a.ReplaceExecutable != b.ReplaceExecutable) return false;
             if (a.ReShade5 != b.ReShade5) return false;
 
@@ -94,6 +95,8 @@ namespace FiveMConfigEditorWPF.Views
 
             // Build Number
             ConfigPanel.Children.Add(CreateConfigRow("Build Number", AppState.Data.SavedBuildNumber));
+            if (!string.IsNullOrEmpty(AppState.Data.DefaultBuild))
+                ConfigPanel.Children.Add(CreateConfigRow("Default Build", AppState.Data.DefaultBuild));
 
             // Replace Executable
             ConfigPanel.Children.Add(CreateConfigRow("Replace Executable", 
@@ -120,7 +123,7 @@ namespace FiveMConfigEditorWPF.Views
                 Child = new TextBlock
                 {
                     Text = title,
-                    Foreground = new SolidColorBrush(Color.FromRgb(0x00, 0x78, 0xD4)),
+                    Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0x7A, 0x00)),
                     FontSize = 12,
                     FontWeight = FontWeights.Bold
                 }
@@ -136,7 +139,7 @@ namespace FiveMConfigEditorWPF.Views
             var labelTxt = new TextBlock
             {
                 Text = label,
-                Foreground = new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88)),
+                Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x94, 0x9E)),
                 FontSize = 11
             };
             Grid.SetColumn(labelTxt, 0);
@@ -145,7 +148,7 @@ namespace FiveMConfigEditorWPF.Views
             var valueTxt = new TextBlock
             {
                 Text = string.IsNullOrEmpty(value) ? "(kosong)" : value,
-                Foreground = new SolidColorBrush(Color.FromRgb(0xE0, 0xE0, 0xE0)),
+                Foreground = new SolidColorBrush(Color.FromRgb(0xF0, 0xF6, 0xFC)),
                 FontSize = 11,
                 TextWrapping = TextWrapping.Wrap
             };
@@ -195,8 +198,10 @@ namespace FiveMConfigEditorWPF.Views
             {
                 IVPath = source.IVPath,
                 SavedBuildNumber = source.SavedBuildNumber,
+                DefaultBuild = source.DefaultBuild,
                 ReplaceExecutable = source.ReplaceExecutable,
                 ReShade5 = source.ReShade5,
+                UpdateChannel = source.UpdateChannel,
                 PoolSizes = new System.Collections.Generic.Dictionary<string, int>(source.PoolSizes)
             };
         }

@@ -9,10 +9,10 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner">
 
-  <Border CornerRadius="12" Background="#FF2A1810"
-          BorderBrush="#FF4A3020" BorderThickness="1">
+  <Border CornerRadius="8" Background="#FF0D1117"
+          BorderBrush="#FF21262D" BorderThickness="1">
     <Border.Effect>
-      <DropShadowEffect Color="#FF8C00" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
+      <DropShadowEffect Color="#000000" BlurRadius="24" ShadowDepth="4" Opacity="0.45"/>
     </Border.Effect>
     <Grid>
       <Grid.RowDefinitions>
@@ -31,11 +31,11 @@
 
       <!-- Form -->
       <StackPanel Grid.Row="1" Margin="20,16,20,8">
-        <TextBlock Text="Pool Key" Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,4"/>
+        <TextBlock Text="Pool Key" Foreground="#FF8B949E" FontSize="11" Margin="0,0,0,4"/>
         <ComboBox x:Name="CmbPoolKey" Style="{StaticResource DarkComboBoxStyle}"
                   IsEditable="True" Margin="0,0,0,12"/>
 
-        <TextBlock Text="Value" Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,4"/>
+        <TextBlock Text="Value" Foreground="#FF8B949E" FontSize="11" Margin="0,0,0,4"/>
         <TextBox x:Name="TxtValue" Style="{StaticResource DarkTextBoxStyle}"
                  Text="1000" PreviewTextInput="TxtValue_PreviewTextInput"/>
       </StackPanel>

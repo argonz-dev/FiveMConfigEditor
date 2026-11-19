@@ -25,6 +25,14 @@ x86/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# App runtime files
+presets.json
+snapshots.json
+settings.json
+disabled_binds.json
+server_assets/
+*.bak
+
 # NuGet Packages
 *.nupkg
 **/packages/*

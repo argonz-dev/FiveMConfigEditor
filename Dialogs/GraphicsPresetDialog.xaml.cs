@@ -42,11 +42,10 @@ namespace FiveMConfigEditorWPF.Dialogs
         {
             return quality switch
             {
-                0 => "Off/Very Low",
-                1 => "Low",
-                2 => "Normal",
-                3 => "High",
-                4 => "Very High",
+                0 => "Normal",
+                1 => "High",
+                2 => "Very High",
+                3 => "Ultra",
                 _ => quality.ToString()
             };
         }
@@ -56,9 +55,9 @@ namespace FiveMConfigEditorWPF.Dialogs
             return msaa switch
             {
                 0 => "Off",
-                1 => "x2",
-                2 => "x4",
-                3 => "x8",
+                2 => "2x",
+                4 => "4x",
+                8 => "8x",
                 _ => msaa.ToString()
             };
         }

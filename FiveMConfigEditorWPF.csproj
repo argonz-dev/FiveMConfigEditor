@@ -8,9 +8,9 @@
     <AssemblyName>FiveMConfigEditorWPF</AssemblyName>
     <RootNamespace>FiveMConfigEditorWPF</RootNamespace>
     <ApplicationIcon>app_icon.ico</ApplicationIcon>
-    <Version>1.0.4.0</Version>
-    <AssemblyVersion>1.0.4.0</AssemblyVersion>
-    <FileVersion>1.0.4.0</FileVersion>
+    <Version>2.0.0.0</Version>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
     <Company>FiveM Config Editor</Company>
     <Product>FiveM Config Editor</Product>
     <Copyright>Copyright © 2026</Copyright>
@@ -33,5 +33,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autoupdater.NET.Official" Version="1.9.2" />
+    <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
   </ItemGroup>
 </Project>

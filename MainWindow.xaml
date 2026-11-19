@@ -1,28 +1,30 @@
 <Window x:Class="FiveMConfigEditorWPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         Title="FiveM Config Editor"
-        Width="860" Height="620"
+        Width="880" Height="660"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
 
-  <Border CornerRadius="12" Background="#FF1A0F0A"
-          BorderBrush="#FF4A3020" BorderThickness="1">
+  <Border CornerRadius="8" Background="{StaticResource BgDeepBrush}"
+          BorderBrush="{StaticResource BorderCardBrush}" BorderThickness="1">
     <Border.Effect>
-      <DropShadowEffect Color="#FF8C00" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
+      <DropShadowEffect Color="#000000" BlurRadius="24" ShadowDepth="4" Opacity="0.45"/>
     </Border.Effect>
 
     <Grid>
       <Grid.RowDefinitions>
-        <RowDefinition Height="48"/>
+        <RowDefinition Height="44"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
-      <!-- Title Bar -->
-      <Border Grid.Row="0" Background="#FF0F0A08" CornerRadius="12,12,0,0"
+      <!-- Minimalist Title Bar -->
+      <Border Grid.Row="0" Background="{StaticResource BgSidebarBrush}" CornerRadius="8,8,0,0"
+              BorderBrush="{StaticResource BorderCardBrush}" BorderThickness="0,0,0,1"
               MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
         <Grid>
           <Grid.ColumnDefinitions>
@@ -30,25 +32,25 @@
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
 
-          <!-- Logo + Title -->
-          <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
-            <Image Source="logo.png" Width="32" Height="32" Margin="0,0,10,0"
+          <!-- Logo + Title + Version Badge -->
+          <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0">
+            <Image Source="logo.png" Width="22" Height="22" Margin="0,0,10,0"
                    RenderOptions.BitmapScalingMode="HighQuality"/>
-            <TextBlock Text="FiveM Config Editor" Foreground="#FFFF8C00"
-                       FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Text="FiveM Config Editor" Foreground="{StaticResource TextPrimaryBrush}"
+                       FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            <Border Background="#15FFFFFF" CornerRadius="4" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+              <TextBlock Text="v2.0.0" Foreground="{StaticResource AccentOrangeBrush}" FontSize="10" FontWeight="Bold"/>
+            </Border>
           </StackPanel>
 
           <!-- Window Controls -->
-          <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
-            <Button x:Name="BtnCheckUpdate" Content="🔄" Width="32" Height="28"
-                    Foreground="#FFAA8866" Background="Transparent" BorderThickness="0"
-                    FontSize="13" Cursor="Hand" Click="BtnCheckUpdate_Click"
+          <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,8,0">
+            <Button x:Name="BtnCheckUpdate" Width="32" Height="28"
+                    Background="Transparent" BorderThickness="0"
+                    Cursor="Hand" Click="BtnCheckUpdate_Click"
                     ToolTip="Check for Updates">
               <Button.Style>
                 <Style TargetType="Button">
-                  <Setter Property="Background" Value="Transparent"/>
-                  <Setter Property="Foreground" Value="#FFAA8866"/>
-                  <Setter Property="BorderThickness" Value="0"/>
                   <Setter Property="Template">
                     <Setter.Value>
                       <ControlTemplate TargetType="Button">
@@ -57,8 +59,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                           <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="#FF3A2510"/>
-                            <Setter Property="Foreground" Value="#FFFF8C00"/>
+                            <Setter TargetName="Bd" Property="Background" Value="#1AFFFFFF"/>
                           </Trigger>
                         </ControlTemplate.Triggers>
                       </ControlTemplate>
@@ -66,15 +67,14 @@
                   </Setter>
                 </Style>
               </Button.Style>
+              <fa:IconBlock x:Name="IconCheckUpdate" Icon="Rotate" FontSize="12" Foreground="{StaticResource TextSubBrush}"/>
             </Button>
-            <Button x:Name="BtnMinimize" Content="—" Width="32" Height="28"
-                    Foreground="#FFAA8866" Background="Transparent" BorderThickness="0"
-                    FontSize="13" Cursor="Hand" Click="BtnMinimize_Click">
+
+            <Button x:Name="BtnMinimize" Width="32" Height="28"
+                    Background="Transparent" BorderThickness="0"
+                    Cursor="Hand" Click="BtnMinimize_Click">
               <Button.Style>
                 <Style TargetType="Button">
-                  <Setter Property="Background" Value="Transparent"/>
-                  <Setter Property="Foreground" Value="#FFAA8866"/>
-                  <Setter Property="BorderThickness" Value="0"/>
                   <Setter Property="Template">
                     <Setter.Value>
                       <ControlTemplate TargetType="Button">
@@ -83,7 +83,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                           <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="#FF3A2510"/>
+                            <Setter TargetName="Bd" Property="Background" Value="#1AFFFFFF"/>
                           </Trigger>
                         </ControlTemplate.Triggers>
                       </ControlTemplate>
@@ -91,15 +91,14 @@
                   </Setter>
                 </Style>
               </Button.Style>
+              <fa:IconBlock Icon="WindowMinimize" FontSize="10" Margin="0,-4,0,0" Foreground="{StaticResource TextSubBrush}"/>
             </Button>
-            <Button x:Name="BtnClose" Content="✕" Width="32" Height="28"
-                    Foreground="#FFAA8866" Background="Transparent" BorderThickness="0"
-                    FontSize="13" Cursor="Hand" Click="BtnClose_Click">
+
+            <Button x:Name="BtnClose" Width="32" Height="28"
+                    Background="Transparent" BorderThickness="0"
+                    Cursor="Hand" Click="BtnClose_Click">
               <Button.Style>
                 <Style TargetType="Button">
-                  <Setter Property="Background" Value="Transparent"/>
-                  <Setter Property="Foreground" Value="#FFAA8866"/>
-                  <Setter Property="BorderThickness" Value="0"/>
                   <Setter Property="Template">
                     <Setter.Value>
                       <ControlTemplate TargetType="Button">
@@ -108,8 +107,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                           <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="#FFFF4D4D"/>
-                            <Setter Property="Foreground" Value="White"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource AccentRedBrush}"/>
                           </Trigger>
                         </ControlTemplate.Triggers>
                       </ControlTemplate>
@@ -117,6 +115,7 @@
                   </Setter>
                 </Style>
               </Button.Style>
+              <fa:IconBlock Icon="Xmark" FontSize="13" Foreground="{StaticResource TextSubBrush}"/>
             </Button>
           </StackPanel>
         </Grid>
@@ -125,77 +124,85 @@
       <!-- Main Content Row -->
       <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="100"/>
+          <ColumnDefinition Width="84"/>
           <ColumnDefinition Width="1"/>
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar -->
-        <Border Grid.Column="0" Background="#FF0F0A08" CornerRadius="0,0,0,12">
+        <Border Grid.Column="0" Background="{StaticResource BgSidebarBrush}" CornerRadius="0,0,0,8">
           <StackPanel VerticalAlignment="Top" Margin="0,12,0,0">
 
-            <!-- Status LED -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,16">
-              <Ellipse x:Name="LedStatus" Width="10" Height="10" Fill="#FFAA8866" Margin="0,0,6,0"/>
-              <TextBlock x:Name="TxtLedLabel" Text="OFF" Foreground="#FFAA8866" FontSize="10" VerticalAlignment="Center"/>
+            <!-- Status Indicator -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,14">
+              <Ellipse x:Name="LedStatus" Width="8" Height="8" Fill="{StaticResource TextSubBrush}" Margin="0,0,6,0"/>
+              <TextBlock x:Name="TxtLedLabel" Text="OFF" Foreground="{StaticResource TextSubBrush}" FontSize="10" FontWeight="SemiBold" VerticalAlignment="Center"/>
             </StackPanel>
 
             <Button x:Name="BtnHome" Style="{StaticResource SidebarButtonActiveStyle}"
                     Click="BtnHome_Click">
               <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="🏠" FontSize="20" HorizontalAlignment="Center"/>
-                <TextBlock Text="Home" FontSize="10" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                <fa:IconBlock Icon="House" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="Home" FontSize="11" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
 
             <Button x:Name="BtnConfig" Style="{StaticResource SidebarButtonStyle}"
                     Click="BtnConfig_Click">
               <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="⚙" FontSize="20" HorizontalAlignment="Center"/>
-                <TextBlock Text="Config" FontSize="10" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                <fa:IconBlock Icon="Sliders" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="Config" FontSize="11" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
 
             <Button x:Name="BtnHistory" Style="{StaticResource SidebarButtonStyle}"
                     Click="BtnHistory_Click">
               <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="📋" FontSize="20" HorizontalAlignment="Center"/>
-                <TextBlock Text="Status" FontSize="10" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                <fa:IconBlock Icon="ClockRotateLeft" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="Status" FontSize="11" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
 
             <Button x:Name="BtnModManager" Style="{StaticResource SidebarButtonStyle}"
                     Click="BtnModManager_Click">
               <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="🎮" FontSize="20" HorizontalAlignment="Center"/>
-                <TextBlock Text="Mods" FontSize="10" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                <fa:IconBlock Icon="PuzzlePiece" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="Mods" FontSize="11" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
 
             <Button x:Name="BtnGraphics" Style="{StaticResource SidebarButtonStyle}"
                     Click="BtnGraphics_Click">
               <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="🎨" FontSize="20" HorizontalAlignment="Center"/>
-                <TextBlock Text="Graphics" FontSize="10" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                <fa:IconBlock Icon="Palette" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="Graphics" FontSize="11" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
 
             <Button x:Name="BtnAiAssistant" Style="{StaticResource SidebarButtonStyle}"
                     Click="BtnAiAssistant_Click">
               <StackPanel HorizontalAlignment="Center">
-                <TextBlock Text="🤖" FontSize="20" HorizontalAlignment="Center"/>
-                <TextBlock Text="AI Chat" FontSize="10" HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                <fa:IconBlock Icon="Robot" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="AI Chat" FontSize="11" HorizontalAlignment="Center"/>
+              </StackPanel>
+            </Button>
+
+            <Button x:Name="BtnTools" Style="{StaticResource SidebarButtonStyle}"
+                    Click="BtnTools_Click">
+              <StackPanel HorizontalAlignment="Center">
+                <fa:IconBlock Icon="Wrench" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="Tools" FontSize="11" HorizontalAlignment="Center"/>
               </StackPanel>
             </Button>
 
           </StackPanel>
         </Border>
 
-        <!-- Separator -->
-        <Rectangle Grid.Column="1" Fill="#FF4A3020"/>
+        <!-- Minimalist Separator -->
+        <Rectangle Grid.Column="1" Fill="{StaticResource BorderCardBrush}"/>
 
         <!-- Content Area -->
-        <Border Grid.Column="2" Background="#FF1F1410" CornerRadius="0,0,12,0">
+        <Border Grid.Column="2" Background="{StaticResource BgContentBrush}" CornerRadius="0,0,8,0">
           <ContentControl x:Name="MainContent"/>
         </Border>
 

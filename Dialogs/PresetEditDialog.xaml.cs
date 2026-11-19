@@ -17,8 +17,12 @@ namespace FiveMConfigEditorWPF.Dialogs
             InitializeComponent();
             TxtName.Text = preset.Name;
             TxtDesc.Text = preset.Description;
+            TxtServerUrl.Text = preset.ServerUrl;
+            TxtKeptNickname.Text = preset.KeptNickname ?? "";
             TxtImagePath.Text = preset.ImagePath;
+            TxtBannerPath.Text = preset.BannerPath ?? "";
             UpdateImagePreview(preset.ImagePath);
+            UpdateBannerPreview(preset.BannerPath ?? "");
         }
 
         private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -47,6 +51,51 @@ namespace FiveMConfigEditorWPF.Dialogs
             ImgPreview.Source = ImageHelper.LoadImage(path);
         }
 
+        private void UpdateBannerPreview(string path)
+        {
+            ImgBannerPreview.Source = ImageHelper.LoadImage(path);
+        }
+
+        private async void BtnFetchServerAssets_Click(object sender, RoutedEventArgs e)
+        {
+            string serverUrl = TxtServerUrl.Text.Trim();
+            if (string.IsNullOrWhiteSpace(serverUrl))
+            {
+                MessageBox.Show("Isi Server Connect / Host terlebih dahulu.", "Info",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            BtnFetchServerAssets.IsEnabled = false;
+            BtnFetchServerAssets.Content = "⏳ Mengambil...";
+            try
+            {
+                var (ok, iconPath, bannerPath, err) = await ServerProbeHelper.FetchAndSaveServerAssetsAsync(serverUrl, _preset.Id);
+                if (!ok)
+                {
+                    MessageBox.Show($"Gagal mengambil logo/banner server:\n{err}", "Info",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (!string.IsNullOrEmpty(iconPath))
+                {
+                    TxtImagePath.Text = iconPath;
+                    UpdateImagePreview(iconPath);
+                }
+                if (!string.IsNullOrEmpty(bannerPath))
+                {
+                    TxtBannerPath.Text = bannerPath;
+                    UpdateBannerPreview(bannerPath);
+                }
+            }
+            finally
+            {
+                BtnFetchServerAssets.IsEnabled = true;
+                BtnFetchServerAssets.Content = "🌐 Ambil Logo & Banner";
+            }
+        }
+
         private void BtnOk_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TxtName.Text))
@@ -57,7 +106,10 @@ namespace FiveMConfigEditorWPF.Dialogs
             }
             _preset.Name = TxtName.Text.Trim();
             _preset.Description = TxtDesc.Text.Trim();
+            _preset.ServerUrl = TxtServerUrl.Text.Trim();
+            _preset.KeptNickname = TxtKeptNickname.Text.Trim();
             _preset.ImagePath = TxtImagePath.Text.Trim();
+            _preset.BannerPath = TxtBannerPath.Text.Trim();
             _preset.UpdatedAt = DateTime.Now;
             DialogResult = true;
         }

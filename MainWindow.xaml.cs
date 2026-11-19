@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using FiveMConfigEditorWPF.Models;
 using FiveMConfigEditorWPF.Views;
 using AutoUpdaterDotNET;
@@ -12,15 +14,18 @@ namespace FiveMConfigEditorWPF
     public partial class MainWindow : Window
     {
         private FileSystemWatcher? _watcher;
+        private DispatcherTimer? _watcherDebounceTimer;
         private HomeView? _homeView;
         private ConfigView? _configView;
         private HistoryView? _historyView;
         private ModManagerView? _modManagerView;
         private GraphicsView? _graphicsView;
         private AiAssistantView? _aiAssistantView;
+        private FiveMToolsView? _toolsView;
         private bool _isCheckingUpdate = false;
         private bool _hasUpdateAvailable = false;
         private bool _isManualUpdateCheck = false;
+        private DateTime _suppressWatcherUntil = DateTime.MinValue;
 
         public MainWindow()
         {
@@ -60,6 +65,7 @@ namespace FiveMConfigEditorWPF
             _modManagerView = new ModManagerView(this);
             _graphicsView   = new GraphicsView(this);
             _aiAssistantView = new AiAssistantView(this);
+            _toolsView      = new FiveMToolsView(this);
 
             // Auto-load ini dari settings sebelumnya
             if (!string.IsNullOrEmpty(AppState.IniPath) && File.Exists(AppState.IniPath))
@@ -92,30 +98,40 @@ namespace FiveMConfigEditorWPF
                     // Only show dialog if manually triggered
                     if (_isManualUpdateCheck)
                     {
-                        var result = MessageBox.Show(
-                            $"Update tersedia!\n\n" +
-                            $"Versi saat ini: {args.CurrentVersion}\n" +
-                            $"Versi baru: {args.InstalledVersion}\n\n" +
-                            $"Apakah Anda ingin update sekarang?",
-                            "Update Tersedia",
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Information);
-
-                        if (result == MessageBoxResult.Yes)
+                        _ = Dispatcher.InvokeAsync(async () =>
                         {
                             try
                             {
-                                if (AutoUpdater.DownloadUpdate(args))
+                                var notes = await GitHubReleaseHelper.FetchReleaseNotesAsync(args.CurrentVersion);
+                                var dlg = new Dialogs.ReleaseNotesDialog(
+                                    args.InstalledVersion?.ToString() ?? "2.0.0",
+                                    args.CurrentVersion ?? "",
+                                    notes)
                                 {
-                                    Application.Current.Shutdown();
+                                    Owner = this
+                                };
+
+                                if (dlg.ShowDialog() == true)
+                                {
+                                    try
+                                    {
+                                        if (AutoUpdater.DownloadUpdate(args))
+                                        {
+                                            Application.Current.Shutdown();
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show($"Error saat download update:\n{ex.Message}",
+                                            "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    }
                                 }
                             }
                             catch (Exception ex)
                             {
-                                MessageBox.Show($"Error saat download update:\n{ex.Message}", 
-                                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                System.Diagnostics.Debug.WriteLine($"Release notes dialog failed: {ex.Message}");
                             }
-                        }
+                        });
                     }
                 }
                 else
@@ -127,7 +143,7 @@ namespace FiveMConfigEditorWPF
                     if (_isManualUpdateCheck)
                     {
                         MessageBox.Show(
-                            $"Aplikasi sudah up to date!\n\nVersi saat ini: {args.CurrentVersion}",
+                            $"Aplikasi sudah up to date!\n\nVersi saat ini: {args.InstalledVersion?.ToString() ?? "2.0.0"}",
                             "Up to Date",
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
@@ -199,17 +215,17 @@ namespace FiveMConfigEditorWPF
             {
                 if (_isCheckingUpdate)
                 {
-                    BtnCheckUpdate.Content = "⏳";
+                    IconCheckUpdate.Foreground = (Brush)FindResource("TextSubBrush");
                     BtnCheckUpdate.ToolTip = "Checking for updates...";
                 }
                 else if (_hasUpdateAvailable)
                 {
-                    BtnCheckUpdate.Content = "🔄!";
+                    IconCheckUpdate.Foreground = (Brush)FindResource("AccentOrangeBrush");
                     BtnCheckUpdate.ToolTip = "Update available! Click to update";
                 }
                 else
                 {
-                    BtnCheckUpdate.Content = "🔄";
+                    IconCheckUpdate.Foreground = (Brush)FindResource("TextSubBrush");
                     BtnCheckUpdate.ToolTip = "Check for Updates";
                 }
             });
@@ -238,6 +254,7 @@ namespace FiveMConfigEditorWPF
         private void BtnModManager_Click(object sender, RoutedEventArgs e) => NavigateTo("ModManager");
         private void BtnGraphics_Click(object sender, RoutedEventArgs e) => NavigateTo("Graphics");
         private void BtnAiAssistant_Click(object sender, RoutedEventArgs e) => NavigateTo("AiAssistant");
+        private void BtnTools_Click(object sender, RoutedEventArgs e) => NavigateTo("Tools");
 
         public void NavigateTo(string page)
         {
@@ -247,6 +264,7 @@ namespace FiveMConfigEditorWPF
             BtnModManager.Style = (Style)FindResource("SidebarButtonStyle");
             BtnGraphics.Style   = (Style)FindResource("SidebarButtonStyle");
             BtnAiAssistant.Style = (Style)FindResource("SidebarButtonStyle");
+            BtnTools.Style      = (Style)FindResource("SidebarButtonStyle");
 
             switch (page)
             {
@@ -280,6 +298,11 @@ namespace FiveMConfigEditorWPF
                     _aiAssistantView?.Refresh();
                     MainContent.Content = _aiAssistantView;
                     break;
+                case "Tools":
+                    BtnTools.Style = (Style)FindResource("SidebarButtonActiveStyle");
+                    _toolsView?.Refresh();
+                    MainContent.Content = _toolsView;
+                    break;
             }
         }
 
@@ -303,35 +326,78 @@ namespace FiveMConfigEditorWPF
 
             _watcher = new FileSystemWatcher(dir, file)
             {
-                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size,
+                NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.FileName,
                 EnableRaisingEvents = true
             };
             _watcher.Changed += OnFileChanged;
+            _watcher.Created += OnFileChanged;
+            _watcher.Renamed += OnFileChanged;
             AppState.WatcherActive = true;
             UpdateLed(true);
         }
 
+        public void SuppressWatcherUntil(TimeSpan duration)
+        {
+            var until = DateTime.UtcNow + duration;
+            if (until > _suppressWatcherUntil)
+                _suppressWatcherUntil = until;
+        }
+
         private void OnFileChanged(object sender, FileSystemEventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            if (DateTime.UtcNow < _suppressWatcherUntil) return;
+
+            _ = Dispatcher.InvokeAsync(() =>
+            {
+                if (DateTime.UtcNow < _suppressWatcherUntil) return;
+
+                if (_watcherDebounceTimer == null)
+                {
+                    _watcherDebounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
+                    _watcherDebounceTimer.Tick += async (_, _) =>
+                    {
+                        _watcherDebounceTimer.Stop();
+                        await ReloadWatchedIniAsync();
+                    };
+                }
+                _watcherDebounceTimer.Stop();
+                _watcherDebounceTimer.Start();
+            });
+        }
+
+        private async Task ReloadWatchedIniAsync()
+        {
+            if (DateTime.UtcNow < _suppressWatcherUntil) return;
+
+            string path = AppState.IniPath;
+            if (string.IsNullOrEmpty(path) || !File.Exists(path)) return;
+
+            for (int attempt = 0; attempt < 3; attempt++)
             {
                 try
                 {
-                    System.Threading.Thread.Sleep(200);
-                    AppState.Data = IniHelper.Load(AppState.IniPath);
+                    AppState.Data = IniHelper.Load(path);
                     var snap = new Snapshot
                     {
                         Label = "Auto-detected change",
-                        SourceFile = AppState.IniPath,
+                        SourceFile = path,
                         Data = AppState.Data,
                         CapturedAt = DateTime.Now
                     };
                     SnapshotManager.Add(AppState.Snapshots, snap);
                     _configView?.Refresh();
                     _historyView?.Refresh(); // Refresh status view to detect changes
+                    return;
                 }
-                catch { }
-            });
+                catch (IOException) when (attempt < 2)
+                {
+                    await Task.Delay(120);
+                }
+                catch
+                {
+                    return;
+                }
+            }
         }
 
         public void UpdateLed(bool active)

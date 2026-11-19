@@ -7,10 +7,10 @@
         Background="Transparent" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False">
-  <Border CornerRadius="10" Background="#FF2A1810"
-          BorderBrush="#FF4A3020" BorderThickness="1">
+  <Border CornerRadius="10" Background="#FF0D1117"
+          BorderBrush="#FF21262D" BorderThickness="1">
     <Border.Effect>
-      <DropShadowEffect Color="#FF8C00" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+      <DropShadowEffect Color="#000000" BlurRadius="24" ShadowDepth="4" Opacity="0.45"/>
     </Border.Effect>
     <Grid Margin="30">
       <Grid.RowDefinitions>
@@ -28,12 +28,12 @@
 
       <!-- Progress Bar -->
       <ProgressBar Grid.Row="1" Height="8" IsIndeterminate="True"
-                   Foreground="#FFFF8C00" Background="#FF4A3020"
+                   Foreground="#FFFF8C00" Background="#FF21262D"
                    BorderThickness="0" Margin="0,0,0,12"/>
 
       <!-- Status Text -->
       <TextBlock Grid.Row="2" x:Name="TxtStatus" Text="Mohon tunggu..."
-                 Foreground="#FFAA8866" FontSize="12"
+                 Foreground="#FF8B949E" FontSize="12"
                  HorizontalAlignment="Center" VerticalAlignment="Top"
                  TextWrapping="Wrap" TextAlignment="Center"/>
     </Grid>

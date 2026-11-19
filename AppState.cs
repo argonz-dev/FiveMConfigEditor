@@ -14,6 +14,7 @@ namespace FiveMConfigEditorWPF
         public static string FiveMPath { get; set; } = @"d:\FiveM\FiveM.app";
         public static string AiApiBaseUrl { get; set; } = SecureConfig.GetApiBaseUrl();
         public static string AiApiKey { get; set; } = SecureConfig.GetApiKey();
+        public static string AiModel { get; set; } = SecureConfig.GetDefaultModel();
         public static IniData Data { get; set; } = new();
         public static List<Preset> Presets { get; set; } = new();
         public static List<Snapshot> Snapshots { get; set; } = new();
@@ -32,10 +33,20 @@ namespace FiveMConfigEditorWPF
                         IniPath = s.IniPath;
                     if (!string.IsNullOrEmpty(s.FiveMPath))
                         FiveMPath = s.FiveMPath;
-                    if (!string.IsNullOrEmpty(s.AiApiBaseUrl))
+                    if (!string.IsNullOrEmpty(s.AiApiBaseUrl) && (s.AiApiBaseUrl.StartsWith("http://") || s.AiApiBaseUrl.StartsWith("https://")))
                         AiApiBaseUrl = s.AiApiBaseUrl;
-                    if (!string.IsNullOrEmpty(s.AiApiKey))
+                    else
+                        AiApiBaseUrl = SecureConfig.GetApiBaseUrl();
+
+                    if (!string.IsNullOrEmpty(s.AiApiKey) && !s.AiApiKey.StartsWith("enx-"))
                         AiApiKey = s.AiApiKey;
+                    else
+                        AiApiKey = SecureConfig.GetApiKey();
+
+                    if (!string.IsNullOrEmpty(s.AiModel))
+                        AiModel = s.AiModel;
+                    else
+                        AiModel = SecureConfig.GetDefaultModel();
                 }
             }
             catch { }
@@ -50,8 +61,9 @@ namespace FiveMConfigEditorWPF
                     IniPath = IniPath,
                     FiveMPath = FiveMPath,
                     AiApiBaseUrl = AiApiBaseUrl,
-                    AiApiKey = AiApiKey
-                });
+                    AiApiKey = AiApiKey,
+                    AiModel = AiModel
+                }, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(SettingsPath, json);
             }
             catch { }
@@ -63,6 +75,7 @@ namespace FiveMConfigEditorWPF
             public string FiveMPath { get; set; } = "";
             public string AiApiBaseUrl { get; set; } = "";
             public string AiApiKey { get; set; } = "";
+            public string AiModel { get; set; } = "";
         }
     }
 }

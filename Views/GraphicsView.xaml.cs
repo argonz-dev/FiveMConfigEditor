@@ -88,8 +88,8 @@ namespace FiveMConfigEditorWPF.Views
             try
             {
                 // Texture & Quality
-                CmbTextureQuality.SelectedIndex = Clamp(_data.TextureQuality, 0, 4);
-                CmbShaderQuality.SelectedIndex = Clamp(_data.ShaderQuality, 0, 4);
+                CmbTextureQuality.SelectedIndex = Math.Clamp(_data.TextureQuality, 0, 2);
+                CmbShaderQuality.SelectedIndex = Math.Clamp(_data.ShaderQuality, 0, 2);
                 CmbAnisotropic.SelectedIndex = _data.AnisotropicFiltering switch
                 {
                     0 => 0,
@@ -101,31 +101,37 @@ namespace FiveMConfigEditorWPF.Views
                 };
 
                 // Shadows
-                CmbShadowQuality.SelectedIndex = Clamp(_data.ShadowQuality, 0, 4);
-                CmbSoftShadows.SelectedIndex = Clamp(_data.Shadow_SoftShadows, 0, 5);
+                CmbShadowQuality.SelectedIndex = Math.Clamp(_data.ShadowQuality, 0, 3);
+                CmbSoftShadows.SelectedIndex = Math.Clamp(_data.Shadow_SoftShadows, 0, 5);
                 ChkLongShadows.IsChecked = _data.Shadow_LongShadows;
                 ChkParticleShadows.IsChecked = _data.Shadow_ParticleShadows;
 
                 // Reflections & Effects
-                CmbReflectionQuality.SelectedIndex = Clamp(_data.ReflectionQuality, 0, 4);
-                CmbWaterQuality.SelectedIndex = Clamp(_data.WaterQuality, 0, 2);
-                CmbParticleQuality.SelectedIndex = Clamp(_data.ParticleQuality, 0, 3);
-                CmbGrassQuality.SelectedIndex = Clamp(_data.GrassQuality, 0, 4);
+                CmbReflectionQuality.SelectedIndex = Math.Clamp(_data.ReflectionQuality, 0, 3);
+                CmbWaterQuality.SelectedIndex = Math.Clamp(_data.WaterQuality, 0, 2);
+                CmbParticleQuality.SelectedIndex = Math.Clamp(_data.ParticleQuality, 0, 2);
+                CmbGrassQuality.SelectedIndex = Math.Clamp(_data.GrassQuality, 0, 3);
 
                 // Anti-Aliasing
-                CmbMSAA.SelectedIndex = Clamp(_data.MSAA, 0, 3);
+                CmbMSAA.SelectedIndex = _data.MSAA switch
+                {
+                    2 => 1,
+                    4 => 2,
+                    8 => 3,
+                    _ => 0
+                };
                 ChkFXAA.IsChecked = _data.FXAA_Enabled;
                 ChkTXAA.IsChecked = _data.TXAA_Enabled;
 
                 // Post Processing
-                CmbPostFX.SelectedIndex = Clamp(_data.PostFX, 0, 4);
+                CmbPostFX.SelectedIndex = Math.Clamp(_data.PostFX, 0, 3);
                 ChkDoF.IsChecked = _data.DoF;
                 ChkSSAO.IsChecked = _data.SSAO > 0;
 
                 // Advanced
-                CmbTessellation.SelectedIndex = Clamp(_data.Tessellation, 0, 4);
-                SliderLodScale.Value = ClampDouble(_data.LodScale, 0, 2);
-                SliderCityDensity.Value = ClampDouble(_data.CityDensity, 0, 1);
+                CmbTessellation.SelectedIndex = Math.Clamp(_data.Tessellation, 0, 3);
+                SliderLodScale.Value = Math.Clamp(_data.LodScale, 0.0f, 1.0f);
+                SliderCityDensity.Value = Math.Clamp(_data.CityDensity, 0.0f, 1.0f);
             }
             catch (Exception ex)
             {
@@ -151,8 +157,8 @@ namespace FiveMConfigEditorWPF.Views
         private void SaveUIToData()
         {
             // Texture & Quality
-            _data.TextureQuality = CmbTextureQuality.SelectedIndex;
-            _data.ShaderQuality = CmbShaderQuality.SelectedIndex;
+            _data.TextureQuality = Math.Clamp(CmbTextureQuality.SelectedIndex, 0, 2);
+            _data.ShaderQuality = Math.Clamp(CmbShaderQuality.SelectedIndex, 0, 2);
             _data.AnisotropicFiltering = CmbAnisotropic.SelectedIndex switch
             {
                 0 => 0,
@@ -164,31 +170,37 @@ namespace FiveMConfigEditorWPF.Views
             };
 
             // Shadows
-            _data.ShadowQuality = CmbShadowQuality.SelectedIndex;
-            _data.Shadow_SoftShadows = CmbSoftShadows.SelectedIndex;
+            _data.ShadowQuality = Math.Clamp(CmbShadowQuality.SelectedIndex, 0, 3);
+            _data.Shadow_SoftShadows = Math.Clamp(CmbSoftShadows.SelectedIndex, 0, 5);
             _data.Shadow_LongShadows = ChkLongShadows.IsChecked == true;
             _data.Shadow_ParticleShadows = ChkParticleShadows.IsChecked == true;
 
             // Reflections & Effects
-            _data.ReflectionQuality = CmbReflectionQuality.SelectedIndex;
-            _data.WaterQuality = CmbWaterQuality.SelectedIndex;
-            _data.ParticleQuality = CmbParticleQuality.SelectedIndex;
-            _data.GrassQuality = CmbGrassQuality.SelectedIndex;
+            _data.ReflectionQuality = Math.Clamp(CmbReflectionQuality.SelectedIndex, 0, 3);
+            _data.WaterQuality = Math.Clamp(CmbWaterQuality.SelectedIndex, 0, 2);
+            _data.ParticleQuality = Math.Clamp(CmbParticleQuality.SelectedIndex, 0, 2);
+            _data.GrassQuality = Math.Clamp(CmbGrassQuality.SelectedIndex, 0, 3);
 
             // Anti-Aliasing
-            _data.MSAA = CmbMSAA.SelectedIndex;
+            _data.MSAA = CmbMSAA.SelectedIndex switch
+            {
+                1 => 2,
+                2 => 4,
+                3 => 8,
+                _ => 0
+            };
             _data.FXAA_Enabled = ChkFXAA.IsChecked == true;
             _data.TXAA_Enabled = ChkTXAA.IsChecked == true;
 
             // Post Processing
-            _data.PostFX = CmbPostFX.SelectedIndex;
+            _data.PostFX = Math.Clamp(CmbPostFX.SelectedIndex, 0, 3);
             _data.DoF = ChkDoF.IsChecked == true;
             _data.SSAO = ChkSSAO.IsChecked == true ? 2 : 0;
 
             // Advanced
-            _data.Tessellation = CmbTessellation.SelectedIndex;
-            _data.LodScale = (float)SliderLodScale.Value;
-            _data.CityDensity = (float)SliderCityDensity.Value;
+            _data.Tessellation = Math.Clamp(CmbTessellation.SelectedIndex, 0, 3);
+            _data.LodScale = (float)Math.Clamp(SliderLodScale.Value, 0.0, 1.0);
+            _data.CityDensity = (float)Math.Clamp(SliderCityDensity.Value, 0.0, 1.0);
         }
 
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
@@ -223,6 +235,17 @@ namespace FiveMConfigEditorWPF.Views
 
         private void BtnResetToSafe_Click(object sender, RoutedEventArgs e)
         {
+            if (GtaGraphicsHelper.IsGameRunning())
+            {
+                MessageBox.Show(
+                    "FiveM atau GTA V sedang berjalan!\n\n" +
+                    "Tutup game terlebih dahulu sebelum mereset pengaturan grafis.",
+                    "Game Sedang Berjalan",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
             var confirm = MessageBox.Show(
                 "Reset graphics settings ke default (Low/Safe)?\n\n" +
                 "Ini akan:\n" +
@@ -247,6 +270,17 @@ namespace FiveMConfigEditorWPF.Views
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
+            if (GtaGraphicsHelper.IsGameRunning())
+            {
+                MessageBox.Show(
+                    "FiveM atau GTA V sedang berjalan!\n\n" +
+                    "Tutup game terlebih dahulu sebelum menyimpan pengaturan grafis agar file tidak tertimpa oleh game saat keluar.",
+                    "Game Sedang Berjalan",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+                return;
+            }
+
             try
             {
                 SaveUIToData();
@@ -322,42 +356,43 @@ namespace FiveMConfigEditorWPF.Views
 
         private void ApplyPreset(string preset)
         {
+            bool isNvidia = GtaGraphicsHelper.IsNvidiaGpu();
             switch (preset)
             {
                 case "Ultra":
-                    _data.TextureQuality = 4;
-                    _data.ShaderQuality = 4;
-                    _data.ShadowQuality = 4;
-                    _data.ReflectionQuality = 4;
-                    _data.WaterQuality = 2;
-                    _data.ParticleQuality = 3;
-                    _data.GrassQuality = 4;
-                    _data.PostFX = 4;
-                    _data.MSAA = 3;
+                    _data.TextureQuality = 2;       // Very High (Max RAGE enum)
+                    _data.ShaderQuality = 2;        // Very High (Max RAGE enum)
+                    _data.ShadowQuality = 3;        // Very High (Max RAGE enum)
+                    _data.ReflectionQuality = 3;    // Ultra
+                    _data.WaterQuality = 2;         // Very High
+                    _data.ParticleQuality = 2;      // Very High (Max RAGE enum)
+                    _data.GrassQuality = 3;         // Ultra
+                    _data.PostFX = 3;               // Ultra
+                    _data.MSAA = 4;                 // 4x (valid D3D MSAA count)
                     _data.AnisotropicFiltering = 16;
-                    _data.Tessellation = 4;
-                    _data.Shadow_SoftShadows = 5;
+                    _data.Tessellation = 3;         // Very High (Max RAGE enum)
+                    _data.Shadow_SoftShadows = isNvidia ? 5 : 3; // NVIDIA PCSS if NVIDIA, else Softest (Rockstar)
                     _data.Shadow_LongShadows = true;
                     _data.Shadow_ParticleShadows = true;
                     _data.SSAO = 2;
                     _data.DoF = true;
-                    _data.LodScale = 1.5f;
+                    _data.LodScale = 1.0f;
                     _data.CityDensity = 1.0f;
                     break;
 
                 case "High":
-                    _data.TextureQuality = 3;
-                    _data.ShaderQuality = 3;
-                    _data.ShadowQuality = 3;
-                    _data.ReflectionQuality = 3;
-                    _data.WaterQuality = 1;
-                    _data.ParticleQuality = 2;
-                    _data.GrassQuality = 3;
-                    _data.PostFX = 3;
-                    _data.MSAA = 2;
+                    _data.TextureQuality = 2;       // Very High
+                    _data.ShaderQuality = 1;        // High
+                    _data.ShadowQuality = 2;        // High
+                    _data.ReflectionQuality = 2;    // Very High
+                    _data.WaterQuality = 1;         // High
+                    _data.ParticleQuality = 1;      // High
+                    _data.GrassQuality = 2;         // Very High
+                    _data.PostFX = 2;               // Very High
+                    _data.MSAA = 2;                 // 2x (valid D3D MSAA count)
                     _data.AnisotropicFiltering = 16;
-                    _data.Tessellation = 3;
-                    _data.Shadow_SoftShadows = 4;
+                    _data.Tessellation = 2;         // High
+                    _data.Shadow_SoftShadows = 3;   // Softest (Safe for all GPUs)
                     _data.Shadow_LongShadows = true;
                     _data.Shadow_ParticleShadows = true;
                     _data.SSAO = 2;
@@ -367,39 +402,39 @@ namespace FiveMConfigEditorWPF.Views
                     break;
 
                 case "Medium":
-                    _data.TextureQuality = 2;
-                    _data.ShaderQuality = 2;
-                    _data.ShadowQuality = 2;
-                    _data.ReflectionQuality = 2;
-                    _data.WaterQuality = 1;
-                    _data.ParticleQuality = 1;
-                    _data.GrassQuality = 2;
-                    _data.PostFX = 2;
-                    _data.MSAA = 0;
+                    _data.TextureQuality = 1;       // High
+                    _data.ShaderQuality = 1;        // High
+                    _data.ShadowQuality = 1;        // Normal
+                    _data.ReflectionQuality = 1;    // High
+                    _data.WaterQuality = 1;         // High
+                    _data.ParticleQuality = 1;      // High
+                    _data.GrassQuality = 1;         // High
+                    _data.PostFX = 1;               // High
+                    _data.MSAA = 0;                 // Off
                     _data.AnisotropicFiltering = 8;
-                    _data.Tessellation = 2;
-                    _data.Shadow_SoftShadows = 3;
+                    _data.Tessellation = 1;         // Normal
+                    _data.Shadow_SoftShadows = 2;   // Softer
                     _data.Shadow_LongShadows = false;
                     _data.Shadow_ParticleShadows = true;
                     _data.SSAO = 1;
-                    _data.DoF = true;
-                    _data.LodScale = 1.0f;
+                    _data.DoF = false;
+                    _data.LodScale = 0.8f;
                     _data.CityDensity = 0.8f;
                     break;
 
                 case "Low":
-                    _data.TextureQuality = 1;
-                    _data.ShaderQuality = 1;
-                    _data.ShadowQuality = 1;
-                    _data.ReflectionQuality = 1;
-                    _data.WaterQuality = 0;
-                    _data.ParticleQuality = 0;
-                    _data.GrassQuality = 1;
-                    _data.PostFX = 1;
-                    _data.MSAA = 0;
-                    _data.AnisotropicFiltering = 4;
-                    _data.Tessellation = 1;
-                    _data.Shadow_SoftShadows = 2;
+                    _data.TextureQuality = 0;       // Normal (Lowest RAGE enum)
+                    _data.ShaderQuality = 0;        // Normal
+                    _data.ShadowQuality = 1;        // Normal
+                    _data.ReflectionQuality = 0;    // Normal
+                    _data.WaterQuality = 0;         // Normal
+                    _data.ParticleQuality = 0;      // Normal
+                    _data.GrassQuality = 0;         // Normal
+                    _data.PostFX = 0;               // Normal
+                    _data.MSAA = 0;                 // Off
+                    _data.AnisotropicFiltering = 0; // Off
+                    _data.Tessellation = 0;         // Off
+                    _data.Shadow_SoftShadows = 0;   // Sharp
                     _data.Shadow_LongShadows = false;
                     _data.Shadow_ParticleShadows = false;
                     _data.SSAO = 0;

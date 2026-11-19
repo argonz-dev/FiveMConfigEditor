@@ -1,0 +1,110 @@
+<Window x:Class="FiveMConfigEditorWPF.Dialogs.ReleaseNotesDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Catatan Rilis Pembaruan"
+        Width="540" Height="480"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner">
+
+  <Border CornerRadius="8" Background="{StaticResource BgDeepBrush}"
+          BorderBrush="{StaticResource BorderCardBrush}" BorderThickness="1">
+    <Border.Effect>
+      <DropShadowEffect Color="#000000" BlurRadius="24" ShadowDepth="4" Opacity="0.45"/>
+    </Border.Effect>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="46"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <!-- Title Bar -->
+      <Border Grid.Row="0" Background="{StaticResource BgCardBrush}"
+              BorderBrush="{StaticResource BorderCardBrush}" BorderThickness="0,0,0,1"
+              CornerRadius="8,8,0,0"
+              MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+        <Grid Margin="16,0">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+            <TextBlock Text="★ Pembaruan Tersedia" Foreground="{StaticResource AccentOrangeBrush}"
+                       FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
+          </StackPanel>
+          <Border Grid.Column="1" Background="#22FF7A00" BorderBrush="{StaticResource AccentOrangeBrush}"
+                  BorderThickness="1" CornerRadius="4" Padding="8,3" VerticalAlignment="Center">
+            <TextBlock x:Name="TxtVersionBadge" Text="v1.0.0 → v1.0.1"
+                       Foreground="{StaticResource AccentOrangeBrush}"
+                       FontSize="11" FontWeight="SemiBold"/>
+          </Border>
+        </Grid>
+      </Border>
+
+      <!-- Release Header Card -->
+      <Border Grid.Row="1" Margin="18,14,18,10" Padding="14,10"
+              Background="{StaticResource BgCardBrush}"
+              BorderBrush="{StaticResource BorderCardBrush}" BorderThickness="1"
+              CornerRadius="6">
+        <StackPanel>
+          <TextBlock x:Name="TxtReleaseTitle" Text="Pembaruan Aplikasi"
+                     Foreground="{StaticResource TextPrimaryBrush}"
+                     FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+          <TextBlock x:Name="TxtPublishedDate" Text=""
+                     Foreground="{StaticResource TextSubBrush}"
+                     FontSize="11" Margin="0,3,0,0"/>
+        </StackPanel>
+      </Border>
+
+      <!-- Release Notes Body -->
+      <Border Grid.Row="2" Margin="18,0,18,14"
+              Background="{StaticResource BgCardBrush}"
+              BorderBrush="{StaticResource BorderCardBrush}" BorderThickness="1"
+              CornerRadius="6">
+        <TextBox x:Name="TxtReleaseBody"
+                 IsReadOnly="True"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Disabled"
+                 Background="Transparent"
+                 Foreground="{StaticResource TextPrimaryBrush}"
+                 BorderThickness="0"
+                 Padding="12"
+                 FontSize="12"
+                 FontFamily="Segoe UI"
+                 CaretBrush="{StaticResource AccentOrangeBrush}"
+                 SelectionBrush="#55FF7A00"/>
+      </Border>
+
+      <!-- Footer Buttons -->
+      <Grid Grid.Row="3" Margin="18,0,18,16">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Button x:Name="BtnOpenGitHub" Grid.Column="0"
+                Content="Buka di GitHub"
+                Style="{StaticResource SecondaryButtonSmallStyle}"
+                Click="BtnOpenGitHub_Click"/>
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal">
+          <Button Content="Nanti"
+                  Style="{StaticResource RedButtonSmallStyle}"
+                  MinWidth="78"
+                  Margin="0,0,8,0"
+                  Click="BtnLater_Click"/>
+          <Button Content="Update Sekarang"
+                  Style="{StaticResource NeonButtonStyle}"
+                  Click="BtnUpdateNow_Click"/>
+        </StackPanel>
+      </Grid>
+    </Grid>
+  </Border>
+</Window>

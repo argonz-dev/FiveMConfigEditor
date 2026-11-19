@@ -1,3 +1,4 @@
+using FontAwesome.Sharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -134,16 +135,46 @@ namespace FiveMConfigEditorWPF.Views
         }
 
         // ── Item Card ──────────────────────────────────────────────────────────
+        private static IconChar GetTypeIconChar(ModType type) => type switch
+        {
+            ModType.Rpf            => IconChar.BoxArchive,
+            ModType.Plugin         => IconChar.Plug,
+            ModType.Upscaler       => IconChar.Expand,
+            ModType.ReShadeHook    => IconChar.Palette,
+            ModType.ReShadeShaders => IconChar.WandMagicSparkles,
+            ModType.QuantVAddon    => IconChar.Sun,
+            _                      => IconChar.File
+        };
+
+        private static Border MakeTag(string text, Color bg)
+        {
+            return new Border
+            {
+                Background      = new SolidColorBrush(Color.FromRgb(0x21, 0x26, 0x2D)),
+                BorderBrush     = new SolidColorBrush(Color.FromRgb(0x30, 0x36, 0x3D)),
+                BorderThickness = new Thickness(1),
+                CornerRadius    = new CornerRadius(4),
+                Padding         = new Thickness(6, 2, 6, 2),
+                Margin          = new Thickness(0, 0, 6, 0),
+                Child           = new TextBlock
+                {
+                    Text       = text,
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x94, 0x9E)),
+                    FontSize   = 10
+                }
+            };
+        }
+
         private Border CreateItemCard(ModItem item, bool isPlugin)
         {
             var card = new Border
             {
-                Background    = new SolidColorBrush(Color.FromRgb(0x1A, 0x1A, 0x2E)),
-                CornerRadius  = new CornerRadius(8),
-                BorderBrush   = new SolidColorBrush(Color.FromRgb(0x2A, 0x2A, 0x4A)),
+                Background      = new SolidColorBrush(Color.FromRgb(0x16, 0x1B, 0x22)),
+                CornerRadius    = new CornerRadius(6),
+                BorderBrush     = new SolidColorBrush(Color.FromRgb(0x21, 0x26, 0x2D)),
                 BorderThickness = new Thickness(1),
-                Margin        = new Thickness(0, 0, 0, 6),
-                Padding       = new Thickness(14, 10, 14, 10)
+                Margin          = new Thickness(0, 0, 0, 6),
+                Padding         = new Thickness(12, 10, 12, 10)
             };
 
             var grid = new Grid();
@@ -153,12 +184,12 @@ namespace FiveMConfigEditorWPF.Views
             // Left: icon + info
             var left = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
 
-            // Type icon
-            var icon = new TextBlock
+            var icon = new IconBlock
             {
-                Text       = GetTypeIcon(item.Type),
-                FontSize   = 18,
-                Margin     = new Thickness(0, 0, 10, 0),
+                Icon              = GetTypeIconChar(item.Type),
+                FontSize          = 15,
+                Foreground        = new SolidColorBrush(Color.FromRgb(0xFF, 0x7A, 0x00)),
+                Margin            = new Thickness(0, 0, 12, 0),
                 VerticalAlignment = VerticalAlignment.Center
             };
             left.Children.Add(icon);
@@ -167,15 +198,15 @@ namespace FiveMConfigEditorWPF.Views
             info.Children.Add(new TextBlock
             {
                 Text       = item.Name,
-                Foreground = new SolidColorBrush(Color.FromRgb(0xE0, 0xE0, 0xE0)),
-                FontSize   = 13,
+                Foreground = new SolidColorBrush(Color.FromRgb(0xF0, 0xF6, 0xFC)),
+                FontSize   = 12,
                 FontWeight = FontWeights.SemiBold
             });
 
-            var meta = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 2, 0, 0) };
-            meta.Children.Add(MakeTag(item.TypeLabel, Color.FromRgb(0x00, 0x78, 0xD4)));
-            meta.Children.Add(MakeTag(item.SizeDisplay, Color.FromRgb(0x44, 0x44, 0x66)));
-            if (item.IsDirectory) meta.Children.Add(MakeTag("📁 Folder", Color.FromRgb(0x44, 0x44, 0x66)));
+            var meta = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 3, 0, 0) };
+            meta.Children.Add(MakeTag(item.TypeLabel, Colors.Transparent));
+            meta.Children.Add(MakeTag(item.SizeDisplay, Colors.Transparent));
+            if (item.IsDirectory) meta.Children.Add(MakeTag("Folder", Colors.Transparent));
             info.Children.Add(meta);
 
             left.Children.Add(info);
@@ -187,10 +218,10 @@ namespace FiveMConfigEditorWPF.Views
 
             var statusDot = new System.Windows.Shapes.Ellipse
             {
-                Width  = 8, Height = 8,
+                Width  = 7, Height = 7,
                 Fill   = item.IsEnabled
-                    ? new SolidColorBrush(Color.FromRgb(0x2E, 0xCC, 0x71))
-                    : new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88)),
+                    ? new SolidColorBrush(Color.FromRgb(0x23, 0x86, 0x36))
+                    : new SolidColorBrush(Color.FromRgb(0x8B, 0x94, 0x9E)),
                 Margin = new Thickness(0, 0, 6, 0),
                 VerticalAlignment = VerticalAlignment.Center
             };
@@ -200,10 +231,10 @@ namespace FiveMConfigEditorWPF.Views
             {
                 Text       = item.IsEnabled ? "Aktif" : "Nonaktif",
                 Foreground = item.IsEnabled
-                    ? new SolidColorBrush(Color.FromRgb(0x2E, 0xCC, 0x71))
-                    : new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88)),
+                    ? new SolidColorBrush(Color.FromRgb(0x23, 0x86, 0x36))
+                    : new SolidColorBrush(Color.FromRgb(0x8B, 0x94, 0x9E)),
                 FontSize   = 11,
-                Margin     = new Thickness(0, 0, 12, 0),
+                Margin     = new Thickness(0, 0, 10, 0),
                 VerticalAlignment = VerticalAlignment.Center
             };
             right.Children.Add(statusTxt);
@@ -212,11 +243,11 @@ namespace FiveMConfigEditorWPF.Views
             {
                 Content    = item.IsEnabled ? "Nonaktifkan" : "Aktifkan",
                 Background = item.IsEnabled
-                    ? new SolidColorBrush(Color.FromRgb(0x4A, 0x1A, 0x1A))
-                    : new SolidColorBrush(Color.FromRgb(0x1A, 0x4A, 0x2A)),
-                Foreground = new SolidColorBrush(Colors.White),
+                    ? new SolidColorBrush(Color.FromRgb(0xDA, 0x36, 0x33))
+                    : new SolidColorBrush(Color.FromRgb(0x23, 0x86, 0x36)),
+                Foreground = Brushes.White,
                 Style      = (Style)FindResource("ToggleEnableStyle"),
-                Tag        = (item, isPlugin)
+                Tag        = item
             };
             toggleBtn.Click += ToggleItem_Click;
             right.Children.Add(toggleBtn);
@@ -254,12 +285,12 @@ namespace FiveMConfigEditorWPF.Views
         {
             var card = new Border
             {
-                Background    = new SolidColorBrush(Color.FromRgb(0x1A, 0x1A, 0x2E)),
-                CornerRadius  = new CornerRadius(8),
-                BorderBrush   = new SolidColorBrush(Color.FromRgb(0x2A, 0x2A, 0x4A)),
+                Background      = new SolidColorBrush(Color.FromRgb(0x16, 0x1B, 0x22)),
+                CornerRadius    = new CornerRadius(6),
+                BorderBrush     = new SolidColorBrush(Color.FromRgb(0x21, 0x26, 0x2D)),
                 BorderThickness = new Thickness(1),
-                Margin        = new Thickness(0, 0, 0, 8),
-                Padding       = new Thickness(16, 12, 16, 12)
+                Margin          = new Thickness(0, 0, 0, 8),
+                Padding         = new Thickness(14, 12, 14, 12)
             };
 
             var grid = new Grid();
@@ -270,21 +301,21 @@ namespace FiveMConfigEditorWPF.Views
             info.Children.Add(new TextBlock
             {
                 Text       = preset.Name,
-                Foreground = new SolidColorBrush(Color.FromRgb(0xE0, 0xE0, 0xE0)),
+                Foreground = new SolidColorBrush(Color.FromRgb(0xF0, 0xF6, 0xFC)),
                 FontSize   = 13, FontWeight = FontWeights.SemiBold
             });
             if (!string.IsNullOrEmpty(preset.Description))
                 info.Children.Add(new TextBlock
                 {
                     Text       = preset.Description,
-                    Foreground = new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88)),
+                    Foreground = new SolidColorBrush(Color.FromRgb(0x8B, 0x94, 0x9E)),
                     FontSize   = 11, Margin = new Thickness(0, 2, 0, 0)
                 });
 
             var meta = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 4, 0, 0) };
-            meta.Children.Add(MakeTag($"📦 {preset.ModsState.Count(kv => kv.Value)} mods aktif", Color.FromRgb(0x00, 0x78, 0xD4)));
-            meta.Children.Add(MakeTag($"🔌 {preset.PluginsState.Count(kv => kv.Value)} plugins aktif", Color.FromRgb(0x44, 0x44, 0x88)));
-            meta.Children.Add(MakeTag(preset.CreatedAt.ToString("dd/MM/yyyy"), Color.FromRgb(0x33, 0x33, 0x55)));
+            meta.Children.Add(MakeTag($"{preset.ModsState.Count(kv => kv.Value)} mods aktif", Colors.Transparent));
+            meta.Children.Add(MakeTag($"{preset.PluginsState.Count(kv => kv.Value)} plugins aktif", Colors.Transparent));
+            meta.Children.Add(MakeTag(preset.CreatedAt.ToString("dd/MM/yyyy"), Colors.Transparent));
             info.Children.Add(meta);
 
             Grid.SetColumn(info, 0);
@@ -294,27 +325,27 @@ namespace FiveMConfigEditorWPF.Views
 
             var applyBtn = new Button
             {
-                Content    = "▶ Terapkan",
-                Background = new SolidColorBrush(Color.FromRgb(0x00, 0x78, 0xD4)),
-                Foreground = new SolidColorBrush(Colors.White),
+                Content    = "Terapkan",
+                Background = new SolidColorBrush(Color.FromRgb(0xFF, 0x7A, 0x00)),
+                Foreground = Brushes.White,
                 Style      = (Style)FindResource("SmallActionBtn"),
                 Tag        = preset,
                 Margin     = new Thickness(0, 0, 6, 0)
             };
             applyBtn.Click += ApplyPreset_Click;
-            actions.Children.Add(applyBtn);
 
             var deleteBtn = new Button
             {
-                Content    = "🗑",
-                Background = new SolidColorBrush(Color.FromRgb(0x4A, 0x1A, 0x1A)),
-                Foreground = new SolidColorBrush(Colors.White),
+                Content    = "Hapus",
+                Background = new SolidColorBrush(Color.FromRgb(0xDA, 0x36, 0x33)),
+                Foreground = Brushes.White,
                 Style      = (Style)FindResource("SmallActionBtn"),
                 Tag        = preset
             };
             deleteBtn.Click += DeletePreset_Click;
-            actions.Children.Add(deleteBtn);
 
+            actions.Children.Add(applyBtn);
+            actions.Children.Add(deleteBtn);
             Grid.SetColumn(actions, 1);
             grid.Children.Add(actions);
 
@@ -565,37 +596,6 @@ namespace FiveMConfigEditorWPF.Views
         }
 
         // ── Helpers ────────────────────────────────────────────────────────────
-        private static string GetTypeIcon(ModType type) => type switch
-        {
-            ModType.Rpf           => "📦",
-            ModType.Plugin        => "🔌",
-            ModType.Upscaler      => "🔭",
-            ModType.ReShadeHook   => "🎨",
-            ModType.ReShadeShaders => "✨",
-            ModType.QuantVAddon   => "🌟",
-            _ => "📄"
-        };
-
-        private static Border MakeTag(string text, Color bg)
-        {
-            return new Border
-            {
-                Background    = new SolidColorBrush(Color.FromArgb(0x33, bg.R, bg.G, bg.B)),
-                CornerRadius  = new CornerRadius(4),
-                Padding       = new Thickness(6, 2, 6, 2),
-                Margin        = new Thickness(0, 0, 4, 0),
-                Child         = new TextBlock
-                {
-                    Text       = text,
-                    Foreground = new SolidColorBrush(Color.FromRgb(
-                        (byte)Math.Min(bg.R + 80, 255),
-                        (byte)Math.Min(bg.G + 80, 255),
-                        (byte)Math.Min(bg.B + 80, 255))),
-                    FontSize   = 10
-                }
-            };
-        }
-
         private static Border GroupHeader(string title)
         {
             return new Border

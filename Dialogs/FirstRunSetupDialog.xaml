@@ -9,10 +9,10 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
 
-  <Border CornerRadius="12" Background="#FF1A0F0A"
-          BorderBrush="#FF4A3020" BorderThickness="1">
+  <Border CornerRadius="8" Background="#FF0D1117"
+          BorderBrush="#FF21262D" BorderThickness="1">
     <Border.Effect>
-      <DropShadowEffect Color="#FF8C00" BlurRadius="30" ShadowDepth="0" Opacity="0.5"/>
+      <DropShadowEffect Color="#000000" BlurRadius="24" ShadowDepth="4" Opacity="0.45"/>
     </Border.Effect>
     <Grid>
       <Grid.RowDefinitions>
@@ -22,7 +22,7 @@
       </Grid.RowDefinitions>
 
       <!-- Header -->
-      <Border Grid.Row="0" Background="#FF2A1810" CornerRadius="12,12,0,0" Padding="24,20">
+      <Border Grid.Row="0" Background="#FF0D1117" CornerRadius="12,12,0,0" Padding="24,20">
         <StackPanel>
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
             <Image Source="../logo.png" Width="48" Height="48" Margin="0,0,12,0"
@@ -30,7 +30,7 @@
             <StackPanel VerticalAlignment="Center">
               <TextBlock Text="Selamat Datang!" Foreground="#FFFF8C00"
                          FontSize="18" FontWeight="Bold"/>
-              <TextBlock Text="FiveM Config Editor" Foreground="#FFAA8866"
+              <TextBlock Text="FiveM Config Editor" Foreground="#FF8B949E"
                          FontSize="12" Margin="0,2,0,0"/>
             </StackPanel>
           </StackPanel>
@@ -46,7 +46,7 @@
         <StackPanel Margin="24,20,24,10">
 
           <!-- Step 1: FiveM Folder -->
-          <Border Background="#FF2A1810" BorderBrush="#FF4A3020" BorderThickness="1"
+          <Border Background="#FF0D1117" BorderBrush="#FF21262D" BorderThickness="1"
                   CornerRadius="8" Padding="16,14" Margin="0,0,0,16">
             <StackPanel>
               <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
@@ -56,7 +56,7 @@
               </StackPanel>
 
               <TextBlock Text="Pilih folder FiveM yang berisi subfolder mods, plugins, dan CitizenFX.ini"
-                         Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                         Foreground="#FF8B949E" FontSize="11" Margin="0,0,0,8" TextWrapping="Wrap"/>
 
               <Grid>
                 <Grid.ColumnDefinitions>
@@ -79,15 +79,15 @@
                   <TextBlock Text="✅ Folder terdeteksi!" Foreground="#FF2ECC71"
                              FontSize="11" FontWeight="Bold" Margin="0,0,0,6"/>
                   <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                    <TextBlock Text="📦 Mods: " Foreground="#FFAA8866" FontSize="10" Width="80"/>
+                    <TextBlock Text="📦 Mods: " Foreground="#FF8B949E" FontSize="10" Width="80"/>
                     <TextBlock x:Name="TxtModsCount" Text="0 item" Foreground="#FFE0E0E0" FontSize="10"/>
                   </StackPanel>
                   <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
-                    <TextBlock Text="🔌 Plugins: " Foreground="#FFAA8866" FontSize="10" Width="80"/>
+                    <TextBlock Text="🔌 Plugins: " Foreground="#FF8B949E" FontSize="10" Width="80"/>
                     <TextBlock x:Name="TxtPluginsCount" Text="0 item" Foreground="#FFE0E0E0" FontSize="10"/>
                   </StackPanel>
                   <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="📄 CitizenFX.ini: " Foreground="#FFAA8866" FontSize="10" Width="80"/>
+                    <TextBlock Text="📄 CitizenFX.ini: " Foreground="#FF8B949E" FontSize="10" Width="80"/>
                     <TextBlock x:Name="TxtIniStatus" Text="Tidak ditemukan" Foreground="#FFE0E0E0" FontSize="10"/>
                   </StackPanel>
                 </StackPanel>
@@ -114,7 +114,7 @@
                 <TextBlock Text="Informasi Penting" Foreground="#FFFF8C00"
                            FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
               </StackPanel>
-              <TextBlock Foreground="#FFAA8866" FontSize="10" TextWrapping="Wrap">
+              <TextBlock Foreground="#FF8B949E" FontSize="10" TextWrapping="Wrap">
                 <Run Text="• Aplikasi akan mendeteksi folder mods dan plugins secara otomatis"/>
                 <LineBreak/>
                 <Run Text="• Jika CitizenFX.ini ditemukan, akan langsung dimuat"/>
@@ -134,7 +134,7 @@
               Padding="24,12,24,16">
         <Grid>
           <TextBlock x:Name="TxtValidation" Text="Pilih folder FiveM untuk melanjutkan"
-                     Foreground="#FFAA8866" FontSize="11"
+                     Foreground="#FF8B949E" FontSize="11"
                      VerticalAlignment="Center"/>
           <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="❌ Keluar" Style="{StaticResource RedButtonStyle}"

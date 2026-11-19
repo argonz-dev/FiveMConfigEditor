@@ -5,10 +5,10 @@
         WindowStyle="None" AllowsTransparency="True"
         Background="Transparent" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner">
-  <Border Background="#FF1A0F0A" CornerRadius="12"
-          BorderBrush="#FF4A3020" BorderThickness="1">
+  <Border Background="#FF0D1117" CornerRadius="8"
+          BorderBrush="#FF21262D" BorderThickness="1">
     <Border.Effect>
-      <DropShadowEffect Color="#FF8C00" BlurRadius="20" ShadowDepth="0" Opacity="0.5"/>
+      <DropShadowEffect Color="#000000" BlurRadius="24" ShadowDepth="4" Opacity="0.45"/>
     </Border.Effect>
     <Grid>
       <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
       </Grid.RowDefinitions>
 
       <!-- Title bar -->
-      <Border Grid.Row="0" Background="#FF2A1810" CornerRadius="12,12,0,0"
+      <Border Grid.Row="0" Background="#FF0D1117" CornerRadius="12,12,0,0"
               MouseLeftButtonDown="TitleBar_MouseDown">
         <Grid Margin="16,0">
           <TextBlock x:Name="TxtTitle" Text="Config Preset"
@@ -63,7 +63,7 @@
             <Button.Style>
               <Style TargetType="Button">
                 <Setter Property="Background" Value="#FF1E1E32"/>
-                <Setter Property="Foreground" Value="#FFAA8866"/>
+                <Setter Property="Foreground" Value="#FF8B949E"/>
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Template">
@@ -100,7 +100,7 @@
             <TextBlock Text="Game" Foreground="#FFFF8C00" FontSize="12"
                        FontWeight="Bold" Margin="0,0,0,10"/>
 
-            <TextBlock Text="GTA V Path" Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,4"/>
+            <TextBlock Text="GTA V Path" Foreground="#FF8B949E" FontSize="11" Margin="0,0,0,4"/>
             <Grid Margin="0,0,0,12">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -113,15 +113,28 @@
                       Click="BtnBrowseGTA_Click"/>
             </Grid>
 
-            <TextBlock Text="Build Number" Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,4"/>
-            <TextBox x:Name="TxtBuildNumber" Style="{StaticResource DarkTextBoxStyle}" Margin="0,0,0,12"/>
+            <Grid Margin="0,0,0,12">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="Build Number (SavedBuildNumber)" Foreground="#FF8B949E" FontSize="11" Margin="0,0,0,4"/>
+                <TextBox x:Name="TxtBuildNumber" Style="{StaticResource DarkTextBoxStyle}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="2">
+                <TextBlock Text="Default Build (DefaultBuild — opsional)" Foreground="#FF8B949E" FontSize="11" Margin="0,0,0,4"/>
+                <TextBox x:Name="TxtDefaultBuild" Style="{StaticResource DarkTextBoxStyle}"/>
+              </StackPanel>
+            </Grid>
 
             <CheckBox x:Name="ChkReplaceExe" Content="Replace Executable"
                       Style="{StaticResource DarkCheckBoxStyle}" Margin="0,0,0,16"/>
 
             <TextBlock Text="Addons" Foreground="#FFFF8C00" FontSize="12"
                        FontWeight="Bold" Margin="0,0,0,10"/>
-            <TextBlock Text="ReShade5" Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,4"/>
+            <TextBlock Text="ReShade5" Foreground="#FF8B949E" FontSize="11" Margin="0,0,0,4"/>
             <TextBox x:Name="TxtReShade5" Style="{StaticResource DarkTextBoxStyle}" Margin="0,0,0,16"/>
 
             <TextBlock Text="Pool Sizes" Foreground="#FFFF8C00" FontSize="12"
@@ -134,14 +147,14 @@
               <DataGrid x:Name="GridPools" Grid.Column="0"
                         AutoGenerateColumns="False" CanUserAddRows="False"
                         Background="#FF1F1410" Foreground="#FFE0E0E0"
-                        BorderBrush="#FF4A3020" BorderThickness="1"
-                        RowBackground="#FF2A1810" AlternatingRowBackground="#FF1F1410"
-                        GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF4A3020"
+                        BorderBrush="#FF21262D" BorderThickness="1"
+                        RowBackground="#FF0D1117" AlternatingRowBackground="#FF1F1410"
+                        GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF21262D"
                         HeadersVisibility="Column" SelectionMode="Single" MaxHeight="160">
                 <DataGrid.ColumnHeaderStyle>
                   <Style TargetType="DataGridColumnHeader">
                     <Setter Property="Background" Value="#FF0F0A08"/>
-                    <Setter Property="Foreground" Value="#FFAA8866"/>
+                    <Setter Property="Foreground" Value="#FF8B949E"/>
                     <Setter Property="Padding" Value="8,5"/>
                     <Setter Property="FontSize" Value="11"/>
                   </Style>
@@ -185,10 +198,10 @@
           </Grid.RowDefinitions>
           <TextBlock Grid.Row="0"
                      Text="Edit langsung seperti file .ini — copy paste dari file asli juga bisa."
-                     Foreground="#FFAA8866" FontSize="11" Margin="0,0,0,8"/>
+                     Foreground="#FF8B949E" FontSize="11" Margin="0,0,0,8"/>
           <TextBox Grid.Row="1" x:Name="TxtRawIni"
                    Background="#FF0A0A18" Foreground="#FFE0E0E0"
-                   BorderBrush="#FF4A3020" BorderThickness="1"
+                   BorderBrush="#FF21262D" BorderThickness="1"
                    FontFamily="Consolas" FontSize="12"
                    AcceptsReturn="True" AcceptsTab="True"
                    VerticalScrollBarVisibility="Auto"
@@ -209,8 +222,10 @@
                   HorizontalAlignment="Right" Margin="20,10,20,14">
         <Button Content="Batal" Style="{StaticResource RedButtonSmallStyle}"
                 Width="80" Margin="0,0,8,0" Click="BtnCancel_Click"/>
-        <Button Content="💾  Simpan" Style="{StaticResource NeonButtonStyle}"
-                Width="110" Click="BtnSave_Click"/>
+        <Button Content="💾  Simpan" Style="{StaticResource SecondaryButtonSmallStyle}"
+                Width="105" Margin="0,0,8,0" Click="BtnSave_Click"/>
+        <Button x:Name="BtnSaveAndApply" Content="▶  Simpan &amp; Terapkan" Style="{StaticResource NeonButtonStyle}"
+                Width="155" Click="BtnSaveAndApply_Click"/>
       </StackPanel>
     </Grid>
   </Border>

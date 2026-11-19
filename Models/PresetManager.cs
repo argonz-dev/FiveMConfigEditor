@@ -11,6 +11,9 @@ namespace FiveMConfigEditorWPF.Models
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";
         public string ImagePath { get; set; } = "";
+        public string BannerPath { get; set; } = "";
+        public string ServerUrl { get; set; } = "";
+        public string KeptNickname { get; set; } = "";
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public IniData Data { get; set; } = new();
